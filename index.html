@@ -377,18 +377,18 @@
 
     .cat-chip:hover { opacity: 0.85; transform: translateY(-1px); }
 
-    .cat-chip.active { border-color: currentColor; }
+    .cat-chip.active { border-color: var(--brand); color: var(--brand); }
 
-    .chip-all        { background: #ede9fe; color: #6d28d9; }
-    .chip-football   { background: #fef3c7; color: #b45309; }
-    .chip-basketball { background: #ffedd5; color: #c2410c; }
-    .chip-soccer     { background: #dcfce7; color: #16a34a; }
-    .chip-baseball   { background: #dbeafe; color: #1d4ed8; }
-    .chip-tennis     { background: #fce7f3; color: #be185d; }
-    .chip-golf       { background: #d1fae5; color: #065f46; }
-    .chip-cricket    { background: #fef9c3; color: #a16207; }
-    .chip-hockey     { background: #e0f2fe; color: #0369a1; }
-    .chip-olympics   { background: #faf5ff; color: #7e22ce; }
+    .chip-all        { background: #f3f4f6; color: #374151; }
+    .chip-football   { background: #f9fafb; color: #4b5563; }
+    .chip-basketball { background: #f3f4f6; color: #374151; }
+    .chip-soccer     { background: #e5e7eb; color: #374151; }
+    .chip-baseball   { background: #f9fafb; color: #4b5563; }
+    .chip-tennis     { background: #f3f4f6; color: #374151; }
+    .chip-golf       { background: #e5e7eb; color: #4b5563; }
+    .chip-cricket    { background: #f9fafb; color: #374151; }
+    .chip-hockey     { background: #f3f4f6; color: #4b5563; }
+    .chip-olympics   { background: #e5e7eb; color: #374151; }
 
     /* ── Search ── */
     #filter-bar {
@@ -801,6 +801,24 @@
     .field input:focus { outline: none; border-color: var(--accent); }
     .field input::placeholder { color: var(--text-muted); opacity: 0.7; }
 
+    .field textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.875rem;
+      color: var(--text);
+      font-size: 0.875rem;
+      font-family: inherit;
+      line-height: 1.55;
+      resize: vertical;
+      min-height: 78px;
+      transition: border-color 0.2s;
+    }
+
+    .field textarea:focus { outline: none; border-color: var(--accent); }
+    .field textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
+
     .field-hint {
       font-size: 0.73rem;
       color: var(--text-muted);
@@ -1082,7 +1100,7 @@
         <li><span class="fi">📰</span><span><strong>Live headlines</strong> — fetches today's top news stories directly from NewsData.io.</span></li>
         <li><span class="fi">🏷️</span><span><strong>Topic filters</strong> — narrow down by sports, politics, tech, and more using the category chips.</span></li>
         <li><span class="fi">🎨</span><span><strong>Color-coded topics</strong> — each story card is color-coded by topic for quick visual scanning.</span></li>
-        <li><span class="fi">✨</span><span><strong>AI summaries</strong> — click any article for a concise breakdown. Powered by Claude if you add a key; uses article descriptions otherwise.</span></li>
+        <li><span class="fi">✨</span><span><strong>AI summaries</strong> — click any article for a concise breakdown. Powered by Claude via OpenRouter if you add a key; uses article descriptions otherwise.</span></li>
         <li><span class="fi">📖</span><span><strong>Reading tracker</strong> — sign in with a username to track which articles you've read and review your history.</span></li>
       </ul>
       <p class="modal-sub" style="margin-bottom:0">Add your <strong>NewsData.io key</strong> via <strong>⚙ Keys</strong> in the top right to get started.</p>
@@ -1105,11 +1123,18 @@
         <div class="field-hint">Fetches live sports headlines. Free tier at newsdata.io.</div>
       </div>
 
-      <div class="modal-section-title">Claude / Anthropic (Optional)</div>
+      <div class="modal-section-title">OpenRouter (Optional — AI Summaries)</div>
       <div class="field">
         <label>API Key</label>
-        <input type="password" id="claude-key-input" placeholder="sk-ant-xxxxxxxxxxxxxxxx" autocomplete="off">
-        <div class="field-hint">Enables AI-generated article summaries. Without this, article descriptions are used. Get a key at console.anthropic.com.</div>
+        <input type="password" id="claude-key-input" placeholder="sk-or-xxxxxxxxxxxxxxxx" autocomplete="off">
+        <div class="field-hint">Enables AI-generated article summaries via Claude on OpenRouter. Without this, article descriptions are used. Get a key at openrouter.ai.</div>
+      </div>
+
+      <div class="modal-section-title">News Preferences</div>
+      <div class="field">
+        <label>Your Interests &amp; Reading Style</label>
+        <textarea id="settings-pref-input" rows="3" placeholder="e.g. I follow NBA basketball and Premier League soccer. I like concise bullet-point summaries with key stats and context." maxlength="300"></textarea>
+        <div class="field-hint">Shapes what articles appear in your feed. Changes apply on next reload. Sign in to save preferences per account.</div>
       </div>
 
       <div class="modal-actions">
@@ -1127,6 +1152,11 @@
       <div class="field" id="account-field-wrap">
         <label>Username</label>
         <input type="text" id="username-input" placeholder="e.g. alex, sportsreader99…" autocomplete="off" maxlength="32">
+      </div>
+      <div class="field" id="pref-field-wrap">
+        <label>What type of news are you interested in, and what formats are most helpful for you to read?</label>
+        <textarea id="pref-input" rows="3" placeholder="e.g. I follow NBA basketball and Premier League soccer. I like concise bullet-point summaries with key stats and context." maxlength="300"></textarea>
+        <div class="field-hint">This personalizes your feed. You can update it anytime in ⚙ Settings.</div>
       </div>
       <div class="modal-actions" id="account-actions-signin">
         <button class="btn-primary" id="signin-btn">Sign In / Create Account</button>
@@ -1152,6 +1182,7 @@
     let newsdataKey    = localStorage.getItem('newsdata_api_key') || '';
     let claudeKey      = localStorage.getItem('claude_api_key')   || '';
     let currentUser    = localStorage.getItem('tiptoe_user')      || null;
+    let userPref       = currentUser ? (localStorage.getItem(`tiptoe_pref_${currentUser}`) || '') : '';
     let activeCategory = '';
     let activeSearch   = '';
     let allArticles    = [];   // cache for cover page
@@ -1285,8 +1316,9 @@
       if (currentUser) {
         // Show signed-in view with history
         accountTitle.textContent = `@${currentUser}`;
-        accountSub.textContent   = 'Your reading history is tracked below.';
+        accountSub.textContent   = 'Your reading history is tracked below. Update your news preferences in ⚙ Settings.';
         accountFieldWrap.style.display  = 'none';
+        document.getElementById('pref-field-wrap').style.display = 'none';
         accountActionsIn.style.display  = 'none';
         accountActionsOut.style.display = 'block';
         historySection.style.display    = 'block';
@@ -1295,10 +1327,12 @@
         accountTitle.textContent = 'Sign In';
         accountSub.textContent   = 'Enter a username to track the articles you read. No password required — stored locally on your device.';
         accountFieldWrap.style.display  = 'block';
+        document.getElementById('pref-field-wrap').style.display = 'block';
         accountActionsIn.style.display  = 'flex';
         accountActionsOut.style.display = 'none';
         historySection.style.display    = 'none';
         usernameInput.value = '';
+        document.getElementById('pref-input').value = '';
       }
       accountOverlay.classList.remove('hidden');
     }
@@ -1339,10 +1373,17 @@
       if (!name) { usernameInput.focus(); return; }
       currentUser = name;
       localStorage.setItem('tiptoe_user', name);
+      const pref = document.getElementById('pref-input').value.trim();
+      if (pref) {
+        userPref = pref;
+        localStorage.setItem(`tiptoe_pref_${name}`, pref);
+      } else {
+        userPref = localStorage.getItem(`tiptoe_pref_${name}`) || '';
+      }
       accountOverlay.classList.add('hidden');
       updateUserUI();
-      // Re-render cards to show read states
       renderArticles(allArticles);
+      loadNews();
     });
 
     signoutBtn.addEventListener('click', () => {
@@ -1351,6 +1392,15 @@
       accountOverlay.classList.add('hidden');
       updateUserUI();
       renderArticles(allArticles);
+    });
+
+    // Pre-fill preference for returning users as they type their username
+    usernameInput.addEventListener('blur', () => {
+      const name = usernameInput.value.trim();
+      if (name) {
+        const saved = localStorage.getItem(`tiptoe_pref_${name}`) || '';
+        document.getElementById('pref-input').value = saved;
+      }
     });
 
     cancelAccountBtn.addEventListener('click', () => accountOverlay.classList.add('hidden'));
@@ -1377,6 +1427,7 @@
     function openSettings() {
       newsdataKeyInput.value = newsdataKey;
       claudeKeyInput.value   = claudeKey;
+      document.getElementById('settings-pref-input').value = userPref;
       settingsOverlay.classList.remove('hidden');
     }
 
@@ -1385,10 +1436,13 @@
     settingsOverlay.addEventListener('click', e => { if (e.target === settingsOverlay) settingsOverlay.classList.add('hidden'); });
 
     saveKeysBtn.addEventListener('click', () => {
-      const nd = newsdataKeyInput.value.trim();
-      const cl = claudeKeyInput.value.trim();
+      const nd   = newsdataKeyInput.value.trim();
+      const cl   = claudeKeyInput.value.trim();
+      const pref = document.getElementById('settings-pref-input').value.trim();
       if (nd) { newsdataKey = nd; localStorage.setItem('newsdata_api_key', nd); }
       if (cl) { claudeKey   = cl; localStorage.setItem('claude_api_key', cl); }
+      userPref = pref;
+      if (currentUser) localStorage.setItem(`tiptoe_pref_${currentUser}`, pref);
       settingsOverlay.classList.add('hidden');
       loadNews();
     });
@@ -1454,7 +1508,7 @@
       articlesContainer.appendChild(loader);
 
       try {
-        const qParts = [activeCategory, activeSearch].filter(Boolean);
+        const qParts = [activeCategory, activeSearch, userPref].filter(Boolean);
         let url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&category=sports&language=en`;
         if (qParts.length) url += `&q=${encodeURIComponent(qParts.join(' '))}`;
 
@@ -1463,7 +1517,7 @@
         const data = await res.json();
         if (data.status !== 'success') throw new Error(data.results?.message || 'NewsData.io request failed');
 
-        allArticles = (data.results || []).slice(0, 15);
+        allArticles = (data.results || []).slice(0, 3);
 
         // Populate cover with first article if it's still visible
         if (!coverPage.classList.contains('hidden') && !coverPage.classList.contains('fade-out')) {
@@ -1617,16 +1671,14 @@
     }
 
     async function fetchClaudeSummary(title, description) {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': claudeKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
+          'Authorization': `Bearer ${claudeKey}`,
         },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
+          model: 'anthropic/claude-haiku-4-5',
           max_tokens: 300,
           messages: [{
             role: 'user',
@@ -1637,10 +1689,10 @@
 
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        throw new Error(err.error?.message || `Claude error ${response.status}`);
+        throw new Error(err.error?.message || `OpenRouter error ${response.status}`);
       }
       const data = await response.json();
-      return data.content?.[0]?.text || description;
+      return data.choices?.[0]?.message?.content || description;
     }
 
     // ═══════════════════════════════════════════
