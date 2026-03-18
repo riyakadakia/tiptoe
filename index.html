@@ -55,6 +55,28 @@
       margin-left: 0.6rem;
     }
 
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .intro-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .intro-btn:hover { border-color: var(--accent); color: var(--accent); }
+
     .settings-btn {
       background: none;
       border: 1px solid var(--border);
@@ -69,10 +91,7 @@
       transition: border-color 0.2s, color 0.2s;
     }
 
-    .settings-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .settings-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     /* ── Main layout ── */
     main {
@@ -83,7 +102,7 @@
 
     /* ── News Panel ── */
     #news-panel {
-      width: 50%;
+      width: 52%;
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
@@ -91,7 +110,7 @@
     }
 
     .panel-header {
-      padding: 1rem 1.5rem 0.75rem;
+      padding: 0.875rem 1.5rem 0.75rem;
       border-bottom: 1px solid var(--border);
       font-size: 0.8rem;
       font-weight: 600;
@@ -99,12 +118,51 @@
       letter-spacing: 0.08em;
       color: var(--text-muted);
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    #filter-bar {
+    /* ── Category Filters ── */
+    #category-bar {
       display: flex;
       gap: 0.5rem;
       padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    #category-bar::-webkit-scrollbar { display: none; }
+
+    .cat-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-muted);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .cat-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+    .cat-chip.active {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fff;
+    }
+
+    /* ── Search bar ── */
+    #filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
@@ -152,18 +210,6 @@
 
     #clear-filter-btn:hover { color: var(--text); }
 
-    .filter-tag {
-      font-size: 0.7rem;
-      background: var(--brand);
-      color: #fff;
-      border-radius: 4px;
-      padding: 0.15rem 0.4rem;
-      margin-left: 0.5rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      vertical-align: middle;
-    }
-
     #articles-container {
       flex: 1;
       overflow-y: auto;
@@ -183,32 +229,56 @@
       border-radius: 10px;
       padding: 1rem 1.125rem;
       transition: border-color 0.2s;
+      cursor: pointer;
     }
 
     .article-card:hover { border-color: var(--accent); }
+    .article-card.selected { border-color: var(--accent); background: var(--surface2); }
 
-    .article-section {
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .article-source {
       font-size: 0.7rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--accent);
-      margin-bottom: 0.35rem;
+    }
+
+    .article-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
     }
 
     .article-title {
-      font-size: 0.95rem;
+      font-size: 0.925rem;
       font-weight: 600;
       line-height: 1.4;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
       color: var(--text);
     }
 
-    .article-abstract {
-      font-size: 0.825rem;
+    .article-description {
+      font-size: 0.8rem;
       color: var(--text-muted);
-      line-height: 1.55;
+      line-height: 1.5;
       margin-bottom: 0.625rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .article-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
     }
 
     .article-link {
@@ -287,10 +357,10 @@
     }
 
     .summary-title {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
       line-height: 1.4;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
     .summary-divider {
@@ -306,13 +376,29 @@
       letter-spacing: 0.08em;
       color: var(--text-muted);
       margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .ai-badge {
+      background: var(--brand);
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
     }
 
     .summary-body {
       font-size: 0.9rem;
-      line-height: 1.7;
+      line-height: 1.75;
       color: var(--text);
     }
+
+    .summary-body p { margin-bottom: 0.75rem; }
+    .summary-body p:last-child { margin-bottom: 0; }
 
     .summary-footer { margin-top: 1.25rem; }
 
@@ -330,8 +416,9 @@
     }
 
     .summarize-btn:hover { background: var(--surface2); border-color: var(--accent); }
+    .summarize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ── Settings Modal ── */
+    /* ── Intro Modal ── */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -349,21 +436,43 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 2rem;
-      width: 440px;
-      max-width: 90vw;
+      width: 480px;
+      max-width: 92vw;
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal h2 {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       margin-bottom: 0.35rem;
+      color: var(--accent);
     }
 
-    .modal p {
+    .modal .modal-tagline {
       color: var(--text-muted);
       font-size: 0.825rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       line-height: 1.5;
     }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      font-size: 0.875rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .feature-list .fi { font-size: 1.1rem; flex-shrink: 0; }
 
     .field {
       margin-bottom: 1rem;
@@ -392,6 +501,23 @@
     }
 
     .field input:focus { outline: none; border-color: var(--accent); }
+
+    .field .field-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .modal-section-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin: 1.25rem 0 0.875rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
 
     .modal-actions {
       display: flex;
@@ -429,6 +555,8 @@
 
     /* ── Responsive ── */
     @media (max-width: 700px) {
+      #news-panel { width: 100%; }
+      #summary-panel { display: none; }
       #articles-container { padding: 0.75rem 1rem; }
     }
   </style>
@@ -438,19 +566,42 @@
   <!-- Header -->
   <header>
     <div class="logo">TiPToe <span>Sports News Digest</span></div>
-    <button class="settings-btn" id="settings-btn">⚙ API Keys</button>
+    <div class="header-right">
+      <button class="intro-btn" id="intro-btn">? About</button>
+      <button class="settings-btn" id="settings-btn">⚙ API Keys</button>
+    </div>
   </header>
 
   <!-- Main -->
   <main>
     <!-- Left: News -->
     <section id="news-panel">
-      <div class="panel-header">Today's Top Stories <span id="filter-tag" class="filter-tag" style="display:none"></span></div>
-      <div id="filter-bar">
-        <input type="text" id="filter-input" placeholder="Filter: e.g. US sports, basketball, NBA…">
-        <button id="filter-btn">Apply</button>
-        <button id="clear-filter-btn" title="Clear filter">✕</button>
+      <div class="panel-header">
+        Today's Top Stories
+        <span id="filter-tag" style="display:none; font-size:0.7rem; background:var(--brand); color:#fff; border-radius:4px; padding:0.15rem 0.4rem; font-weight:600; letter-spacing:0.03em;"></span>
       </div>
+
+      <!-- Sport category chips -->
+      <div id="category-bar">
+        <button class="cat-chip active" data-cat="">All Sports</button>
+        <button class="cat-chip" data-cat="football">Football</button>
+        <button class="cat-chip" data-cat="basketball">Basketball</button>
+        <button class="cat-chip" data-cat="soccer">Soccer</button>
+        <button class="cat-chip" data-cat="baseball">Baseball</button>
+        <button class="cat-chip" data-cat="tennis">Tennis</button>
+        <button class="cat-chip" data-cat="golf">Golf</button>
+        <button class="cat-chip" data-cat="cricket">Cricket</button>
+        <button class="cat-chip" data-cat="hockey">Hockey</button>
+        <button class="cat-chip" data-cat="olympics">Olympics</button>
+      </div>
+
+      <!-- Keyword search -->
+      <div id="filter-bar">
+        <input type="text" id="filter-input" placeholder="Search by keyword, team, athlete…">
+        <button id="filter-btn">Search</button>
+        <button id="clear-filter-btn" title="Clear search">✕</button>
+      </div>
+
       <div id="articles-container">
         <div class="state-msg" id="news-state">
           <div class="spinner"></div>
@@ -465,22 +616,52 @@
       <div id="summary-content">
         <div class="summary-placeholder">
           <div class="icon">📰</div>
-          <span>Click <strong>Summarize</strong> on any article to see it here.</span>
+          <strong>Click an article to see its summary here.</strong>
+          <span>Select any story from the left panel to get a concise, AI-powered breakdown of the key points.</span>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Settings Modal -->
-  <div class="modal-overlay" id="modal-overlay">
+  <!-- Intro / About Modal -->
+  <div class="modal-overlay hidden" id="intro-overlay">
     <div class="modal">
-      <h2>API Keys</h2>
-      <p>Your keys are stored only in your browser's localStorage and never sent anywhere except the respective APIs.</p>
+      <h2>Welcome to TiPToe</h2>
+      <p class="modal-tagline">Your sports news digest, built for busy students who want to stay informed without spending hours reading.</p>
+      <ul class="feature-list">
+        <li><span class="fi">📰</span><span><strong>Live sports headlines</strong> — fetches today's top stories across all major sports directly from NewsData.io.</span></li>
+        <li><span class="fi">🏷️</span><span><strong>Category filters</strong> — quickly narrow stories by sport (Football, Basketball, Soccer, etc.) using the chips at the top of the news panel.</span></li>
+        <li><span class="fi">🔍</span><span><strong>Keyword search</strong> — search by team name, athlete, or topic to find specific stories.</span></li>
+        <li><span class="fi">✨</span><span><strong>AI summaries</strong> — click any article to instantly get a concise summary of the key points in the right panel. Powered by Claude (optional — works with article descriptions if no Claude key is set).</span></li>
+      </ul>
+      <p class="modal-tagline" style="margin-bottom:0">To get started, add your NewsData.io API key via the <strong>⚙ API Keys</strong> button in the top right.</p>
+      <div class="modal-actions">
+        <button class="btn-primary" id="intro-close-btn">Got it — let's go</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal">
+      <h2 style="color:var(--text)">API Keys</h2>
+      <p class="modal-tagline">Keys are stored only in your browser's localStorage and are never sent anywhere except the respective APIs.</p>
+
+      <div class="modal-section-title">Required</div>
       <div class="field">
         <label>NewsData.io API Key</label>
-        <input type="password" id="newsdata-key-input" placeholder="Enter your NewsData.io API key" autocomplete="off">
+        <input type="password" id="newsdata-key-input" placeholder="pub_xxxxxxxxxxxxxxxx" autocomplete="off">
+        <div class="field-hint">Used to fetch live sports headlines. Free tier available at newsdata.io.</div>
       </div>
-<div class="modal-actions">
+
+      <div class="modal-section-title">Optional — AI Summaries</div>
+      <div class="field">
+        <label>Claude API Key (Anthropic)</label>
+        <input type="password" id="claude-key-input" placeholder="sk-ant-xxxxxxxxxxxxxxxx" autocomplete="off">
+        <div class="field-hint">Enables richer AI-generated summaries. Without this key, article descriptions are used. Get a key at console.anthropic.com.</div>
+      </div>
+
+      <div class="modal-actions">
         <button class="btn-primary" id="save-keys-btn">Save & Load News</button>
         <button class="btn-secondary" id="cancel-keys-btn">Cancel</button>
       </div>
@@ -489,61 +670,38 @@
 
   <script>
     // ── State ──
-    let newsdataKey = localStorage.getItem('newsdata_api_key') || '';
-    let activeFilter = '';        // current filter text
-
-    // Country keyword → newsdata.io country code
-    const COUNTRY_MAP = {
-      'us': 'us', 'usa': 'us', 'united states': 'us', 'american': 'us', 'america': 'us',
-      'uk': 'gb', 'united kingdom': 'gb', 'british': 'gb', 'britain': 'gb', 'england': 'gb',
-      'canada': 'ca', 'canadian': 'ca',
-      'australia': 'au', 'australian': 'au',
-      'india': 'in', 'indian': 'in',
-      'germany': 'de', 'german': 'de',
-      'france': 'fr', 'french': 'fr',
-      'spain': 'es', 'spanish': 'es',
-      'italy': 'it', 'italian': 'it',
-      'brazil': 'br', 'brazilian': 'br',
-      'japan': 'jp', 'japanese': 'jp',
-    };
-
-    function parseFilter(raw) {
-      const text = raw.toLowerCase().trim();
-      let country = null;
-      let keyword = raw.trim();
-
-      // Check each country alias against the filter text
-      for (const [alias, code] of Object.entries(COUNTRY_MAP)) {
-        if (text.includes(alias)) {
-          country = code;
-          // Strip the country word from the keyword query
-          keyword = raw.replace(new RegExp(alias, 'i'), '').replace(/\s+/g, ' ').trim();
-          break;
-        }
-      }
-
-      // Strip generic words that aren't useful as keyword queries
-      keyword = keyword.replace(/\bsports?\b/gi, '').replace(/\s+/g, ' ').trim();
-
-      return { country, keyword };
-    }
+    let newsdataKey  = localStorage.getItem('newsdata_api_key')  || '';
+    let claudeKey    = localStorage.getItem('claude_api_key')    || '';
+    let activeCategory = '';   // current sport category keyword
+    let activeSearch   = '';   // current keyword search text
 
     // ── DOM refs ──
     const modalOverlay      = document.getElementById('modal-overlay');
+    const introOverlay      = document.getElementById('intro-overlay');
     const newsdataKeyInput  = document.getElementById('newsdata-key-input');
+    const claudeKeyInput    = document.getElementById('claude-key-input');
     const saveKeysBtn       = document.getElementById('save-keys-btn');
     const cancelKeysBtn     = document.getElementById('cancel-keys-btn');
     const settingsBtn       = document.getElementById('settings-btn');
+    const introBtn          = document.getElementById('intro-btn');
+    const introcloseBtn     = document.getElementById('intro-close-btn');
     const articlesContainer = document.getElementById('articles-container');
     const summaryContent    = document.getElementById('summary-content');
     const filterInput       = document.getElementById('filter-input');
     const filterBtn         = document.getElementById('filter-btn');
     const clearFilterBtn    = document.getElementById('clear-filter-btn');
     const filterTag         = document.getElementById('filter-tag');
+    const categoryBar       = document.getElementById('category-bar');
 
-    // ── Modal ──
+    // ── Intro Modal ──
+    introBtn.addEventListener('click', () => introOverlay.classList.remove('hidden'));
+    introcloseBtn.addEventListener('click', () => introOverlay.classList.add('hidden'));
+    introOverlay.addEventListener('click', e => { if (e.target === introOverlay) introOverlay.classList.add('hidden'); });
+
+    // ── Settings Modal ──
     function openModal() {
       newsdataKeyInput.value = newsdataKey;
+      claudeKeyInput.value   = claudeKey;
       modalOverlay.classList.remove('hidden');
     }
 
@@ -553,11 +711,31 @@
 
     settingsBtn.addEventListener('click', openModal);
     cancelKeysBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
 
-    // ── Filter ──
-    function applyFilter() {
+    saveKeysBtn.addEventListener('click', () => {
+      const nd = newsdataKeyInput.value.trim();
+      const cl = claudeKeyInput.value.trim();
+      if (nd) { newsdataKey = nd; localStorage.setItem('newsdata_api_key', nd); }
+      if (cl) { claudeKey   = cl; localStorage.setItem('claude_api_key', cl); }
+      closeModal();
+      loadNews();
+    });
+
+    // ── Category chips ──
+    categoryBar.addEventListener('click', e => {
+      const chip = e.target.closest('.cat-chip');
+      if (!chip) return;
+      document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCategory = chip.dataset.cat;
+      loadNews();
+    });
+
+    // ── Keyword search ──
+    function applySearch() {
       const val = filterInput.value.trim();
-      activeFilter = val;
+      activeSearch = val;
       if (val) {
         filterTag.textContent = val;
         filterTag.style.display = 'inline';
@@ -566,30 +744,30 @@
         filterTag.style.display = 'none';
         clearFilterBtn.style.display = 'none';
       }
-      loadNews(val);
+      loadNews();
     }
 
-    filterBtn.addEventListener('click', applyFilter);
-    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') applyFilter(); });
+    filterBtn.addEventListener('click', applySearch);
+    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') applySearch(); });
 
     clearFilterBtn.addEventListener('click', () => {
       filterInput.value = '';
-      activeFilter = '';
+      activeSearch = '';
       filterTag.style.display = 'none';
       clearFilterBtn.style.display = 'none';
       loadNews();
     });
 
-    saveKeysBtn.addEventListener('click', () => {
-      newsdataKey = newsdataKeyInput.value.trim();
-      if (newsdataKey) localStorage.setItem('newsdata_api_key', newsdataKey);
-      closeModal();
-      loadNews();
-    });
-
-    // ── News ──
-    async function loadNews(filterText = '') {
-      if (!newsdataKey) return;
+    // ── News loader ──
+    async function loadNews() {
+      if (!newsdataKey) {
+        articlesContainer.innerHTML = `
+          <div class="state-msg">
+            <span>Enter your NewsData.io API key to get started.</span>
+            <button class="btn-secondary" onclick="openModal()" style="margin-top:0.5rem">⚙ Add API Key</button>
+          </div>`;
+        return;
+      }
 
       articlesContainer.innerHTML = '';
       const stateEl = document.createElement('div');
@@ -599,36 +777,59 @@
 
       try {
         let url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&category=sports&language=en`;
+        if (activeCategory) url += `&q=${encodeURIComponent(activeCategory)}`;
+        if (activeSearch)   url += `&q=${encodeURIComponent((activeCategory ? activeCategory + ' ' : '') + activeSearch)}`;
+        // Combine into one q param properly
+        const qParts = [activeCategory, activeSearch].filter(Boolean);
+        url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&category=sports&language=en`;
+        if (qParts.length) url += `&q=${encodeURIComponent(qParts.join(' '))}`;
 
-        if (filterText) {
-          const { country, keyword } = parseFilter(filterText);
-          if (country) url += `&country=${country}`;
-          if (keyword) url += `&q=${encodeURIComponent(keyword)}`;
-        }
         const res = await fetch(url);
         if (!res.ok) throw new Error(`NewsData.io API error: ${res.status}`);
         const data = await res.json();
         if (data.status !== 'success') throw new Error(data.results?.message || 'NewsData.io request failed');
 
-        const articles = (data.results || []).slice(0, 10);
+        const articles = (data.results || []).slice(0, 15);
         articlesContainer.innerHTML = '';
 
         if (articles.length === 0) {
-          articlesContainer.innerHTML = '<div class="state-msg">No articles found.</div>';
+          articlesContainer.innerHTML = '<div class="state-msg">No articles found for this filter.</div>';
           return;
         }
 
         articles.forEach(article => {
           const card = document.createElement('div');
           card.className = 'article-card';
+
+          const dateStr = article.pubDate
+            ? new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            : '';
+
           card.innerHTML = `
+            <div class="article-meta">
+              ${article.source_id ? `<span class="article-source">${escapeHtml(article.source_id)}</span>` : ''}
+              ${dateStr ? `<span class="article-date">${escapeHtml(dateStr)}</span>` : ''}
+            </div>
             <div class="article-title">${escapeHtml(article.title)}</div>
-            <div style="display:flex;align-items:center;gap:0.75rem;margin-top:0.5rem">
-              <a class="article-link" href="${escapeHtml(article.link)}" target="_blank" rel="noopener">Read more →</a>
-              <button class="summarize-btn">Summarize</button>
+            ${article.description ? `<div class="article-description">${escapeHtml(article.description)}</div>` : ''}
+            <div class="article-actions">
+              <button class="summarize-btn">✨ Summarize</button>
+              <a class="article-link" href="${escapeHtml(article.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Read full article →</a>
             </div>
           `;
-          card.querySelector('.summarize-btn').addEventListener('click', () => showSummary(article));
+
+          const btn = card.querySelector('.summarize-btn');
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectCard(card);
+            showSummary(article, btn);
+          });
+
+          card.addEventListener('click', () => {
+            selectCard(card);
+            showSummary(article, btn);
+          });
+
           articlesContainer.appendChild(card);
         });
 
@@ -642,37 +843,108 @@
       }
     }
 
+    function selectCard(card) {
+      document.querySelectorAll('.article-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    }
+
     // ── Summary ──
-    function showSummary(article) {
-      document.querySelectorAll('.article-card').forEach(c => c.style.borderColor = '');
-      event.currentTarget.closest('.article-card').style.borderColor = 'var(--accent)';
+    async function showSummary(article, btn) {
+      const title       = article.title       || 'Untitled';
+      const source      = article.source_id   || '';
+      const description = article.description || '';
+      const link        = article.link        || '#';
+
+      // Show loading state
       summaryContent.innerHTML = `
-        ${article.source_id ? `<div class="summary-source">${escapeHtml(article.source_id)}</div>` : ''}
-        <div class="summary-title">${escapeHtml(article.title)}</div>
+        ${source ? `<div class="summary-source">${escapeHtml(source)}</div>` : ''}
+        <div class="summary-title">${escapeHtml(title)}</div>
         <hr class="summary-divider">
-        <div class="summary-label">Summary</div>
-        <div class="summary-body">${escapeHtml(article.description || 'No description available.')}</div>
+        <div class="summary-label">Summary <span class="ai-badge">${claudeKey ? 'AI' : 'DESCRIPTION'}</span></div>
+        <div class="summary-body" id="summary-body-text">
+          <div class="state-msg" style="padding:1rem 0;justify-content:flex-start;align-items:flex-start">
+            <div class="spinner" style="width:20px;height:20px;border-width:2px"></div>
+          </div>
+        </div>
         <div class="summary-footer">
-          <a class="article-link" href="${escapeHtml(article.link)}" target="_blank" rel="noopener">Read full article →</a>
+          <a class="article-link" href="${escapeHtml(link)}" target="_blank" rel="noopener">Read full article →</a>
         </div>
       `;
+
+      if (btn) btn.disabled = true;
+
+      try {
+        let summaryText = '';
+
+        if (claudeKey && description) {
+          summaryText = await fetchClaudeSummary(title, description);
+        } else if (description) {
+          summaryText = description;
+        } else {
+          summaryText = 'No description available for this article. Click "Read full article" to view the full story.';
+        }
+
+        document.getElementById('summary-body-text').innerHTML = formatSummary(summaryText);
+      } catch (err) {
+        document.getElementById('summary-body-text').textContent = description || 'Summary unavailable.';
+      }
+
+      if (btn) btn.disabled = false;
+    }
+
+    async function fetchClaudeSummary(title, description) {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': claudeKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 300,
+          messages: [{
+            role: 'user',
+            content: `Summarize this sports news article in 2-3 concise sentences for a student who wants a quick overview. Focus on the key facts: who, what, and why it matters.\n\nTitle: ${title}\n\nDescription: ${description}`
+          }]
+        })
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error?.message || `Claude API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.content?.[0]?.text || description;
+    }
+
+    function formatSummary(text) {
+      // Wrap paragraphs
+      return text.split('\n').filter(l => l.trim()).map(l => `<p>${escapeHtml(l)}</p>`).join('');
     }
 
     // ── Utilities ──
     function escapeHtml(str) {
       if (!str) return '';
-      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
     }
 
     // ── Init ──
     if (!newsdataKey) {
-      modalOverlay.classList.remove('hidden');
+      // Show intro + prompt for API key
+      introOverlay.classList.remove('hidden');
       articlesContainer.innerHTML = `
         <div class="state-msg">
           <span>Enter your NewsData.io API key to get started.</span>
+          <button class="btn-secondary" onclick="openModal()" style="margin-top:0.5rem">⚙ Add API Key</button>
         </div>`;
     } else {
-      modalOverlay.classList.add('hidden');
       loadNews();
     }
   </script>
