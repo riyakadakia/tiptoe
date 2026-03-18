@@ -8,25 +8,213 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --brand: #1a6fd4;
-      --brand-dark: #1258ac;
-      --bg: #0f1b2d;
-      --surface: #162236;
-      --surface2: #1e2f47;
-      --border: #2a3f5f;
-      --text: #e8edf5;
-      --text-muted: #8ba3c0;
-      --accent: #4fa3f7;
+      --bg:           #f5f3ff;
+      --surface:      #ffffff;
+      --surface2:     #ede9fe;
+      --border:       #ddd6fe;
+      --brand:        #7c3aed;
+      --brand-dark:   #6d28d9;
+      --brand-light:  #ede9fe;
+      --text:         #1e1b4b;
+      --text-muted:   #6b7280;
+      --accent:       #8b5cf6;
+      --read-bg:      #f0fdf4;
+      --read-border:  #bbf7d0;
+      --read-text:    #15803d;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
+      overflow: hidden;
       height: 100vh;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ═══════════════════════════════
+       COVER PAGE
+    ═══════════════════════════════ */
+    #cover-page {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    #cover-page.fade-out {
+      opacity: 0;
+      transform: translateY(-30px);
+      pointer-events: none;
+    }
+
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #312e81 0%, #4c1d95 40%, #7c3aed 100%);
+      z-index: 0;
+    }
+
+    .cover-bg-image {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 1;
+    }
+
+    .cover-bg-image.loaded { opacity: 0.18; }
+
+    .cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(30, 27, 75, 0.55) 0%,
+        rgba(30, 27, 75, 0.3) 50%,
+        rgba(30, 27, 75, 0.85) 100%
+      );
+      z-index: 2;
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .cover-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .cover-logo-icon svg { width: 52px; height: 52px; }
+
+    .cover-logo-text {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1.5px;
+      line-height: 1;
+    }
+
+    .cover-logo-text em {
+      font-style: normal;
+      color: #c4b5fd;
+    }
+
+    .cover-tagline {
+      font-size: 1.1rem;
+      color: #c4b5fd;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 3rem;
+    }
+
+    .cover-featured {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      max-width: 620px;
+      width: 100%;
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+
+    .cover-featured-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #c4b5fd;
+      margin-bottom: 0.75rem;
+    }
+
+    .cover-featured-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      margin-bottom: 0.625rem;
+    }
+
+    .cover-featured-desc {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cover-featured-source {
+      margin-top: 0.875rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+    }
+
+    .cover-featured-skeleton .skel-line {
+      background: rgba(255,255,255,0.15);
+      border-radius: 6px;
+      height: 16px;
+      margin-bottom: 0.5rem;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .cover-featured-skeleton .skel-line.wide { width: 100%; }
+    .cover-featured-skeleton .skel-line.mid  { width: 75%; }
+    .cover-featured-skeleton .skel-line.short { width: 50%; height: 11px; }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 0.8; }
+    }
+
+    .enter-btn {
+      background: #fff;
+      color: var(--brand);
+      border: none;
+      border-radius: 50px;
+      padding: 0.875rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .enter-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.32);
+    }
+
+    /* ═══════════════════════════════
+       APP SHELL
+    ═══════════════════════════════ */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
 
     /* ── Header ── */
@@ -34,64 +222,102 @@
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       padding: 0 1.5rem;
-      height: 56px;
+      height: 58px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(124,58,237,0.06);
     }
 
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--accent);
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: default;
+    }
+
+    .logo-wrap svg { width: 30px; height: 30px; }
+
+    .logo-text {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--brand);
       letter-spacing: -0.5px;
     }
 
-    .logo span {
+    .logo-text em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .logo-sub {
+      font-size: 0.75rem;
       color: var(--text-muted);
       font-weight: 400;
-      font-size: 1rem;
-      margin-left: 0.6rem;
+      margin-left: 0.4rem;
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
-    .intro-btn {
+    .hdr-btn {
       background: none;
       border: 1px solid var(--border);
       color: var(--text-muted);
       border-radius: 8px;
-      padding: 0.4rem 0.75rem;
-      font-size: 0.875rem;
+      padding: 0.38rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: border-color 0.2s, color 0.2s;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      white-space: nowrap;
     }
 
-    .intro-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .hdr-btn:hover { border-color: var(--accent); color: var(--brand); }
 
-    .settings-btn {
-      background: none;
+    .user-btn {
+      background: var(--brand-light);
       border: 1px solid var(--border);
-      color: var(--text-muted);
       border-radius: 8px;
-      padding: 0.4rem 0.75rem;
-      font-size: 0.875rem;
+      color: var(--brand);
+      padding: 0.38rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      transition: border-color 0.2s, color 0.2s;
+      transition: background 0.2s;
     }
 
-    .settings-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .user-btn:hover { background: #ddd6fe; }
+
+    .user-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .read-badge {
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 0.65rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 0.1rem 0.35rem;
+      margin-left: 0.2rem;
+    }
 
     /* ── Main layout ── */
     main {
@@ -112,10 +338,10 @@
     .panel-header {
       padding: 0.875rem 1.5rem 0.75rem;
       border-bottom: 1px solid var(--border);
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       color: var(--text-muted);
       flex-shrink: 0;
       display: flex;
@@ -123,56 +349,63 @@
       gap: 0.5rem;
     }
 
-    /* ── Category Filters ── */
+    /* ── Category chips ── */
     #category-bar {
       display: flex;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
+      gap: 0.4rem;
+      padding: 0.625rem 1.25rem;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
       overflow-x: auto;
       scrollbar-width: none;
+      background: var(--surface);
     }
 
     #category-bar::-webkit-scrollbar { display: none; }
 
     .cat-chip {
-      background: var(--surface2);
-      border: 1px solid var(--border);
       border-radius: 20px;
-      color: var(--text-muted);
-      padding: 0.3rem 0.75rem;
-      font-size: 0.775rem;
-      font-weight: 600;
+      padding: 0.28rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      border: 1.5px solid transparent;
       flex-shrink: 0;
+      transition: opacity 0.15s, transform 0.15s;
     }
 
-    .cat-chip:hover { border-color: var(--accent); color: var(--accent); }
+    .cat-chip:hover { opacity: 0.85; transform: translateY(-1px); }
 
-    .cat-chip.active {
-      background: var(--brand);
-      border-color: var(--brand);
-      color: #fff;
-    }
+    .cat-chip.active { border-color: currentColor; }
 
-    /* ── Search bar ── */
+    .chip-all        { background: #ede9fe; color: #6d28d9; }
+    .chip-football   { background: #fef3c7; color: #b45309; }
+    .chip-basketball { background: #ffedd5; color: #c2410c; }
+    .chip-soccer     { background: #dcfce7; color: #16a34a; }
+    .chip-baseball   { background: #dbeafe; color: #1d4ed8; }
+    .chip-tennis     { background: #fce7f3; color: #be185d; }
+    .chip-golf       { background: #d1fae5; color: #065f46; }
+    .chip-cricket    { background: #fef9c3; color: #a16207; }
+    .chip-hockey     { background: #e0f2fe; color: #0369a1; }
+    .chip-olympics   { background: #faf5ff; color: #7e22ce; }
+
+    /* ── Search ── */
     #filter-bar {
       display: flex;
-      gap: 0.5rem;
-      padding: 0.625rem 1.5rem;
+      gap: 0.4rem;
+      padding: 0.625rem 1.25rem;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
+      background: var(--surface);
     }
 
     #filter-input {
       flex: 1;
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
       border-radius: 8px;
-      padding: 0.45rem 0.75rem;
+      padding: 0.42rem 0.75rem;
       color: var(--text);
       font-size: 0.825rem;
       font-family: inherit;
@@ -183,88 +416,137 @@
     #filter-input::placeholder { color: var(--text-muted); }
 
     #filter-btn {
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      background: var(--brand);
+      border: none;
       border-radius: 8px;
-      color: var(--text);
-      padding: 0.45rem 0.875rem;
-      font-size: 0.825rem;
+      color: #fff;
+      padding: 0.42rem 0.875rem;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
-      white-space: nowrap;
+      transition: background 0.2s;
     }
 
-    #filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #filter-btn:hover { background: var(--brand-dark); }
 
     #clear-filter-btn {
       background: none;
       border: 1px solid transparent;
       border-radius: 8px;
       color: var(--text-muted);
-      padding: 0.45rem 0.5rem;
+      padding: 0.42rem 0.5rem;
       font-size: 0.825rem;
       cursor: pointer;
-      transition: color 0.2s;
       display: none;
+      transition: color 0.2s;
     }
 
     #clear-filter-btn:hover { color: var(--text); }
 
+    /* ── Article cards ── */
     #articles-container {
       flex: 1;
       overflow-y: auto;
-      padding: 1rem 1.5rem;
+      padding: 1rem 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.875rem;
+      gap: 0.75rem;
     }
 
-    #articles-container::-webkit-scrollbar { width: 6px; }
+    #articles-container::-webkit-scrollbar { width: 5px; }
     #articles-container::-webkit-scrollbar-track { background: transparent; }
     #articles-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
     .article-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem 1.125rem;
-      transition: border-color 0.2s;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
       cursor: pointer;
     }
 
-    .article-card:hover { border-color: var(--accent); }
-    .article-card.selected { border-color: var(--accent); background: var(--surface2); }
+    .article-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 12px rgba(139,92,246,0.12);
+    }
 
-    .article-meta {
+    .article-card.selected {
+      border-color: var(--brand);
+      box-shadow: 0 2px 16px rgba(124,58,237,0.18);
+    }
+
+    .article-card.is-read { background: var(--read-bg); border-color: var(--read-border); }
+    .article-card.is-read:hover { border-color: #6ee7b7; }
+    .article-card.is-read.selected { border-color: #059669; }
+
+    .card-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+      background: var(--surface2);
+    }
+
+    .card-image-placeholder {
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(135deg, var(--surface2) 0%, var(--border) 100%);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.4rem;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--border);
     }
 
-    .article-source {
-      font-size: 0.7rem;
-      font-weight: 600;
+    .card-body {
+      padding: 0.875rem 1rem;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .card-source {
+      font-size: 0.68rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--accent);
+      color: var(--brand);
     }
 
-    .article-date {
-      font-size: 0.7rem;
+    .card-dot { color: var(--border); font-size: 0.7rem; }
+
+    .card-date {
+      font-size: 0.68rem;
       color: var(--text-muted);
     }
 
-    .article-title {
-      font-size: 0.925rem;
-      font-weight: 600;
-      line-height: 1.4;
-      margin-bottom: 0.45rem;
-      color: var(--text);
+    .read-pill {
+      margin-left: auto;
+      background: var(--read-bg);
+      color: var(--read-text);
+      font-size: 0.62rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 0.1rem 0.4rem;
+      border: 1px solid var(--read-border);
     }
 
-    .article-description {
-      font-size: 0.8rem;
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text);
+      margin-bottom: 0.375rem;
+    }
+
+    .card-desc {
+      font-size: 0.78rem;
       color: var(--text-muted);
       line-height: 1.5;
       margin-bottom: 0.625rem;
@@ -274,21 +556,35 @@
       overflow: hidden;
     }
 
-    .article-actions {
+    .card-actions {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
+      gap: 0.625rem;
     }
 
-    .article-link {
-      font-size: 0.775rem;
+    .summarize-btn {
+      background: var(--brand-light);
+      border: none;
+      border-radius: 6px;
+      color: var(--brand);
+      font-size: 0.73rem;
+      font-weight: 700;
+      padding: 0.28rem 0.6rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .summarize-btn:hover { background: #ddd6fe; }
+    .summarize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .card-link {
+      font-size: 0.73rem;
       color: var(--accent);
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
     }
 
-    .article-link:hover { text-decoration: underline; }
+    .card-link:hover { text-decoration: underline; }
 
     /* Loading / error states */
     .state-msg {
@@ -299,16 +595,17 @@
       flex: 1;
       color: var(--text-muted);
       gap: 0.75rem;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       text-align: center;
       padding: 2rem;
+      min-height: 160px;
     }
 
     .spinner {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border: 3px solid var(--border);
-      border-top-color: var(--accent);
+      border-top-color: var(--brand);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -321,6 +618,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      background: var(--surface);
     }
 
     #summary-content {
@@ -329,7 +627,7 @@
       padding: 1.25rem 1.5rem;
     }
 
-    #summary-content::-webkit-scrollbar { width: 6px; }
+    #summary-content::-webkit-scrollbar { width: 5px; }
     #summary-content::-webkit-scrollbar-track { background: transparent; }
     #summary-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
@@ -345,33 +643,42 @@
       font-size: 0.875rem;
     }
 
-    .summary-placeholder .icon { font-size: 2rem; }
+    .summary-placeholder .icon { font-size: 2.5rem; }
+
+    .summary-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
 
     .summary-source {
       font-size: 0.7rem;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.08em;
+      color: var(--brand);
+      margin-bottom: 0.4rem;
     }
 
     .summary-title {
       font-size: 1.1rem;
-      font-weight: 700;
+      font-weight: 800;
       line-height: 1.4;
       margin-bottom: 0.75rem;
+      color: var(--text);
     }
 
     .summary-divider {
       border: none;
-      border-top: 1px solid var(--border);
+      border-top: 1.5px solid var(--border);
       margin: 1rem 0;
     }
 
     .summary-label {
       font-size: 0.7rem;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-muted);
@@ -384,16 +691,16 @@
     .ai-badge {
       background: var(--brand);
       color: #fff;
-      font-size: 0.6rem;
-      font-weight: 700;
+      font-size: 0.58rem;
+      font-weight: 800;
       padding: 0.1rem 0.35rem;
-      border-radius: 3px;
-      letter-spacing: 0.04em;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
     }
 
     .summary-body {
       font-size: 0.9rem;
-      line-height: 1.75;
+      line-height: 1.8;
       color: var(--text);
     }
 
@@ -402,126 +709,104 @@
 
     .summary-footer { margin-top: 1.25rem; }
 
-    /* Summarize button on cards */
-    .summarize-btn {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--accent);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.3rem 0.6rem;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .summarize-btn:hover { background: var(--surface2); border-color: var(--accent); }
-    .summarize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* ── Intro Modal ── */
+    /* ═══════════════════════════════
+       MODALS
+    ═══════════════════════════════ */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.65);
+      background: rgba(30,27,75,0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      z-index: 150;
+      backdrop-filter: blur(4px);
     }
 
     .modal-overlay.hidden { display: none; }
 
     .modal {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
       padding: 2rem;
-      width: 480px;
+      width: 460px;
       max-width: 92vw;
-      max-height: 90vh;
+      max-height: 88vh;
       overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(124,58,237,0.15);
     }
+
+    .modal-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-logo svg { width: 28px; height: 28px; }
 
     .modal h2 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
       margin-bottom: 0.35rem;
-      color: var(--accent);
     }
 
-    .modal .modal-tagline {
+    .modal-sub {
       color: var(--text-muted);
       font-size: 0.825rem;
       margin-bottom: 1.25rem;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    .feature-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
+    .modal-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin: 1.25rem 0 0.75rem;
+      padding-top: 1rem;
+      border-top: 1.5px solid var(--border);
     }
 
-    .feature-list li {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
-      font-size: 0.875rem;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .feature-list .fi { font-size: 1.1rem; flex-shrink: 0; }
-
-    .field {
-      margin-bottom: 1rem;
-    }
+    .field { margin-bottom: 0.875rem; }
 
     .field label {
       display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.78rem;
+      font-weight: 700;
       color: var(--text-muted);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.38rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
     .field input {
       width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       padding: 0.6rem 0.875rem;
       color: var(--text);
       font-size: 0.875rem;
-      font-family: monospace;
+      font-family: inherit;
       transition: border-color 0.2s;
     }
 
     .field input:focus { outline: none; border-color: var(--accent); }
+    .field input::placeholder { color: var(--text-muted); opacity: 0.7; }
 
-    .field .field-hint {
-      font-size: 0.75rem;
+    .field-hint {
+      font-size: 0.73rem;
       color: var(--text-muted);
-      margin-top: 0.35rem;
-    }
-
-    .modal-section-title {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      margin: 1.25rem 0 0.875rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
+      margin-top: 0.3rem;
     }
 
     .modal-actions {
       display: flex;
-      gap: 0.625rem;
+      gap: 0.5rem;
       margin-top: 1.5rem;
     }
 
@@ -533,7 +818,7 @@
       color: #fff;
       padding: 0.65rem;
       font-size: 0.9rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: background 0.2s;
     }
@@ -542,187 +827,574 @@
 
     .btn-secondary {
       background: none;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       color: var(--text-muted);
       padding: 0.65rem 1rem;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, color 0.2s;
     }
 
-    .btn-secondary:hover { border-color: var(--text-muted); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--brand); }
+
+    /* Feature list in intro */
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      font-size: 0.865rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .fi { font-size: 1.1rem; flex-shrink: 0; }
+
+    /* History list */
+    #history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      max-height: 340px;
+      overflow-y: auto;
+      margin-top: 0.75rem;
+    }
+
+    #history-list::-webkit-scrollbar { width: 4px; }
+    #history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .history-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.625rem 0.75rem;
+      background: var(--bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .history-item-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6ee7b7;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .history-item-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .history-item-time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .clear-history-btn {
+      background: none;
+      border: 1px solid #fca5a5;
+      border-radius: 6px;
+      color: #ef4444;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      margin-top: 0.75rem;
+      transition: background 0.2s;
+    }
+
+    .clear-history-btn:hover { background: #fef2f2; }
 
     /* ── Responsive ── */
-    @media (max-width: 700px) {
+    @media (max-width: 680px) {
       #news-panel { width: 100%; }
       #summary-panel { display: none; }
-      #articles-container { padding: 0.75rem 1rem; }
+      #articles-container { padding: 0.75rem; }
+      .cover-logo-text { font-size: 2.2rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <div class="logo">TiPToe <span>Sports News Digest</span></div>
-    <div class="header-right">
-      <button class="intro-btn" id="intro-btn">? About</button>
-      <button class="settings-btn" id="settings-btn">⚙ API Keys</button>
+  <!-- ═══ COVER PAGE ═══ -->
+  <div id="cover-page">
+    <div class="cover-bg"></div>
+    <div class="cover-bg-image" id="cover-bg-image"></div>
+    <div class="cover-overlay"></div>
+    <div class="cover-content">
+
+      <div class="cover-logo-wrap">
+        <div class="cover-logo-icon">
+          <!-- Footprint logo SVG -->
+          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Left footprint -->
+            <ellipse cx="18" cy="34" rx="7" ry="10" fill="white" opacity="0.95" transform="rotate(-12 18 34)"/>
+            <circle cx="10" cy="23" r="3" fill="white" opacity="0.9"/>
+            <circle cx="14" cy="20" r="2.5" fill="white" opacity="0.85"/>
+            <circle cx="18" cy="19" r="2.5" fill="white" opacity="0.85"/>
+            <circle cx="22" cy="20" r="2.5" fill="white" opacity="0.8"/>
+            <!-- Right footprint -->
+            <ellipse cx="34" cy="20" rx="6" ry="9" fill="#c4b5fd" opacity="0.9" transform="rotate(12 34 20)"/>
+            <circle cx="41" cy="10" r="2.5" fill="#c4b5fd" opacity="0.85"/>
+            <circle cx="37" cy="8" r="2" fill="#c4b5fd" opacity="0.8"/>
+            <circle cx="33" cy="7" r="2" fill="#c4b5fd" opacity="0.8"/>
+            <circle cx="29" cy="9" r="2" fill="#c4b5fd" opacity="0.75"/>
+          </svg>
+        </div>
+        <div class="cover-logo-text">Tip<em>Toe</em></div>
+      </div>
+
+      <div class="cover-tagline">Every Play &bull; Every Game &bull; Every Story</div>
+
+      <div class="cover-featured" id="cover-featured">
+        <div class="cover-featured-skeleton" id="cover-skeleton">
+          <div class="cover-featured-label">⚡ Loading today's top story…</div>
+          <div class="skel-line wide"></div>
+          <div class="skel-line wide"></div>
+          <div class="skel-line mid"></div>
+          <div style="margin-top:0.375rem">
+            <div class="skel-line short"></div>
+          </div>
+        </div>
+        <div id="cover-article" style="display:none"></div>
+      </div>
+
+      <button class="enter-btn" id="enter-btn">Browse Today's Stories →</button>
     </div>
-  </header>
+  </div>
 
-  <!-- Main -->
-  <main>
-    <!-- Left: News -->
-    <section id="news-panel">
-      <div class="panel-header">
-        Today's Top Stories
-        <span id="filter-tag" style="display:none; font-size:0.7rem; background:var(--brand); color:#fff; border-radius:4px; padding:0.15rem 0.4rem; font-weight:600; letter-spacing:0.03em;"></span>
+  <!-- ═══ APP ═══ -->
+  <div id="app">
+    <header>
+      <div class="logo-wrap">
+        <!-- Header logo SVG -->
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="18" cy="34" rx="7" ry="10" fill="#7c3aed" opacity="0.9" transform="rotate(-12 18 34)"/>
+          <circle cx="10" cy="23" r="3" fill="#7c3aed" opacity="0.85"/>
+          <circle cx="14" cy="20" r="2.5" fill="#7c3aed" opacity="0.8"/>
+          <circle cx="18" cy="19" r="2.5" fill="#7c3aed" opacity="0.8"/>
+          <circle cx="22" cy="20" r="2.5" fill="#7c3aed" opacity="0.75"/>
+          <ellipse cx="34" cy="20" rx="6" ry="9" fill="#a78bfa" opacity="0.85" transform="rotate(12 34 20)"/>
+          <circle cx="41" cy="10" r="2.5" fill="#a78bfa" opacity="0.8"/>
+          <circle cx="37" cy="8" r="2" fill="#a78bfa" opacity="0.75"/>
+          <circle cx="33" cy="7" r="2" fill="#a78bfa" opacity="0.75"/>
+          <circle cx="29" cy="9" r="2" fill="#a78bfa" opacity="0.7"/>
+        </svg>
+        <span class="logo-text">Tip<em>Toe</em></span>
+        <span class="logo-sub">Sports Digest</span>
       </div>
 
-      <!-- Sport category chips -->
-      <div id="category-bar">
-        <button class="cat-chip active" data-cat="">All Sports</button>
-        <button class="cat-chip" data-cat="football">Football</button>
-        <button class="cat-chip" data-cat="basketball">Basketball</button>
-        <button class="cat-chip" data-cat="soccer">Soccer</button>
-        <button class="cat-chip" data-cat="baseball">Baseball</button>
-        <button class="cat-chip" data-cat="tennis">Tennis</button>
-        <button class="cat-chip" data-cat="golf">Golf</button>
-        <button class="cat-chip" data-cat="cricket">Cricket</button>
-        <button class="cat-chip" data-cat="hockey">Hockey</button>
-        <button class="cat-chip" data-cat="olympics">Olympics</button>
+      <div class="header-right">
+        <button class="hdr-btn" id="intro-btn">? About</button>
+        <button class="hdr-btn" id="settings-btn">⚙ Keys</button>
+        <button class="user-btn" id="user-btn">
+          <div class="user-avatar" id="user-avatar">?</div>
+          <span id="user-label">Sign In</span>
+          <span class="read-badge hidden" id="read-count-badge">0</span>
+        </button>
       </div>
+    </header>
 
-      <!-- Keyword search -->
-      <div id="filter-bar">
-        <input type="text" id="filter-input" placeholder="Search by keyword, team, athlete…">
-        <button id="filter-btn">Search</button>
-        <button id="clear-filter-btn" title="Clear search">✕</button>
-      </div>
-
-      <div id="articles-container">
-        <div class="state-msg" id="news-state">
-          <div class="spinner"></div>
-          <span>Loading sports news…</span>
+    <main>
+      <!-- Left: News -->
+      <section id="news-panel">
+        <div class="panel-header">
+          Today's Stories
+          <span id="filter-tag" style="display:none; font-size:0.68rem; background:var(--brand); color:#fff; border-radius:4px; padding:0.12rem 0.4rem; font-weight:700; letter-spacing:0.03em;"></span>
         </div>
-      </div>
-    </section>
 
-    <!-- Right: Summary -->
-    <section id="summary-panel">
-      <div class="panel-header">Article Summary</div>
-      <div id="summary-content">
-        <div class="summary-placeholder">
-          <div class="icon">📰</div>
-          <strong>Click an article to see its summary here.</strong>
-          <span>Select any story from the left panel to get a concise, AI-powered breakdown of the key points.</span>
+        <div id="category-bar">
+          <button class="cat-chip chip-all active"        data-cat="">All Sports</button>
+          <button class="cat-chip chip-football"          data-cat="football">🏈 Football</button>
+          <button class="cat-chip chip-basketball"        data-cat="basketball">🏀 Basketball</button>
+          <button class="cat-chip chip-soccer"            data-cat="soccer">⚽ Soccer</button>
+          <button class="cat-chip chip-baseball"          data-cat="baseball">⚾ Baseball</button>
+          <button class="cat-chip chip-tennis"            data-cat="tennis">🎾 Tennis</button>
+          <button class="cat-chip chip-golf"              data-cat="golf">⛳ Golf</button>
+          <button class="cat-chip chip-cricket"           data-cat="cricket">🏏 Cricket</button>
+          <button class="cat-chip chip-hockey"            data-cat="hockey">🏒 Hockey</button>
+          <button class="cat-chip chip-olympics"          data-cat="olympics">🏅 Olympics</button>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <!-- Intro / About Modal -->
+        <div id="filter-bar">
+          <input type="text" id="filter-input" placeholder="Search team, athlete, tournament…">
+          <button id="filter-btn">Search</button>
+          <button id="clear-filter-btn" title="Clear search">✕</button>
+        </div>
+
+        <div id="articles-container">
+          <div class="state-msg">
+            <div class="spinner"></div>
+            <span>Loading sports news…</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Summary -->
+      <section id="summary-panel">
+        <div class="panel-header">Article Summary</div>
+        <div id="summary-content">
+          <div class="summary-placeholder">
+            <div class="icon">📰</div>
+            <strong>Select an article to read its summary.</strong>
+            <span>Click any story on the left to get a concise breakdown of the key points.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ═══ MODAL: Intro ═══ -->
   <div class="modal-overlay hidden" id="intro-overlay">
     <div class="modal">
-      <h2>Welcome to TiPToe</h2>
-      <p class="modal-tagline">Your sports news digest, built for busy students who want to stay informed without spending hours reading.</p>
+      <div class="modal-logo">
+        <svg viewBox="0 0 52 52" fill="none" width="28" height="28">
+          <ellipse cx="18" cy="34" rx="7" ry="10" fill="#7c3aed" transform="rotate(-12 18 34)"/>
+          <circle cx="10" cy="23" r="3" fill="#7c3aed"/>
+          <circle cx="14" cy="20" r="2.5" fill="#7c3aed"/>
+          <circle cx="18" cy="19" r="2.5" fill="#7c3aed"/>
+          <circle cx="22" cy="20" r="2.5" fill="#7c3aed"/>
+          <ellipse cx="34" cy="20" rx="6" ry="9" fill="#a78bfa" transform="rotate(12 34 20)"/>
+          <circle cx="41" cy="10" r="2.5" fill="#a78bfa"/>
+          <circle cx="37" cy="8" r="2" fill="#a78bfa"/>
+          <circle cx="33" cy="7" r="2" fill="#a78bfa"/>
+          <circle cx="29" cy="9" r="2" fill="#a78bfa"/>
+        </svg>
+        <h2>Welcome to TipToe</h2>
+      </div>
+      <p class="modal-sub">Your sports news digest — built for busy students who want to stay informed, fast.</p>
       <ul class="feature-list">
-        <li><span class="fi">📰</span><span><strong>Live sports headlines</strong> — fetches today's top stories across all major sports directly from NewsData.io.</span></li>
-        <li><span class="fi">🏷️</span><span><strong>Category filters</strong> — quickly narrow stories by sport (Football, Basketball, Soccer, etc.) using the chips at the top of the news panel.</span></li>
-        <li><span class="fi">🔍</span><span><strong>Keyword search</strong> — search by team name, athlete, or topic to find specific stories.</span></li>
-        <li><span class="fi">✨</span><span><strong>AI summaries</strong> — click any article to instantly get a concise summary of the key points in the right panel. Powered by Claude (optional — works with article descriptions if no Claude key is set).</span></li>
+        <li><span class="fi">📰</span><span><strong>Live headlines</strong> — fetches today's top sports stories directly from NewsData.io.</span></li>
+        <li><span class="fi">🏷️</span><span><strong>Sport filters</strong> — narrow down by Football, Basketball, Soccer, and more using the category chips.</span></li>
+        <li><span class="fi">🖼️</span><span><strong>Visual stories</strong> — article images are shown on cards and in the summary panel.</span></li>
+        <li><span class="fi">✨</span><span><strong>AI summaries</strong> — click any article for a concise breakdown. Powered by Claude if you add a key; uses article descriptions otherwise.</span></li>
+        <li><span class="fi">📖</span><span><strong>Reading tracker</strong> — sign in with a username to track which articles you've read and review your history.</span></li>
       </ul>
-      <p class="modal-tagline" style="margin-bottom:0">To get started, add your NewsData.io API key via the <strong>⚙ API Keys</strong> button in the top right.</p>
+      <p class="modal-sub" style="margin-bottom:0">Add your <strong>NewsData.io key</strong> via <strong>⚙ Keys</strong> in the top right to get started.</p>
       <div class="modal-actions">
-        <button class="btn-primary" id="intro-close-btn">Got it — let's go</button>
+        <button class="btn-primary" id="intro-close-btn">Let's go →</button>
       </div>
     </div>
   </div>
 
-  <!-- Settings Modal -->
-  <div class="modal-overlay hidden" id="modal-overlay">
+  <!-- ═══ MODAL: Settings ═══ -->
+  <div class="modal-overlay hidden" id="settings-overlay">
     <div class="modal">
-      <h2 style="color:var(--text)">API Keys</h2>
-      <p class="modal-tagline">Keys are stored only in your browser's localStorage and are never sent anywhere except the respective APIs.</p>
+      <h2>API Keys</h2>
+      <p class="modal-sub">Keys are stored only in your browser's localStorage and sent only to the respective APIs.</p>
 
-      <div class="modal-section-title">Required</div>
+      <div class="modal-section-title" style="margin-top:0; padding-top:0; border-top:none">NewsData.io (Required)</div>
       <div class="field">
-        <label>NewsData.io API Key</label>
+        <label>API Key</label>
         <input type="password" id="newsdata-key-input" placeholder="pub_xxxxxxxxxxxxxxxx" autocomplete="off">
-        <div class="field-hint">Used to fetch live sports headlines. Free tier available at newsdata.io.</div>
+        <div class="field-hint">Fetches live sports headlines. Free tier at newsdata.io.</div>
       </div>
 
-      <div class="modal-section-title">Optional — AI Summaries</div>
+      <div class="modal-section-title">Claude / Anthropic (Optional)</div>
       <div class="field">
-        <label>Claude API Key (Anthropic)</label>
+        <label>API Key</label>
         <input type="password" id="claude-key-input" placeholder="sk-ant-xxxxxxxxxxxxxxxx" autocomplete="off">
-        <div class="field-hint">Enables richer AI-generated summaries. Without this key, article descriptions are used. Get a key at console.anthropic.com.</div>
+        <div class="field-hint">Enables AI-generated article summaries. Without this, article descriptions are used. Get a key at console.anthropic.com.</div>
       </div>
 
       <div class="modal-actions">
-        <button class="btn-primary" id="save-keys-btn">Save & Load News</button>
+        <button class="btn-primary" id="save-keys-btn">Save & Reload News</button>
         <button class="btn-secondary" id="cancel-keys-btn">Cancel</button>
       </div>
     </div>
   </div>
 
+  <!-- ═══ MODAL: Account ═══ -->
+  <div class="modal-overlay hidden" id="account-overlay">
+    <div class="modal">
+      <h2 id="account-modal-title">Sign In</h2>
+      <p class="modal-sub" id="account-modal-sub">Enter a username to track the articles you read. No password required — this is stored locally on your device.</p>
+      <div class="field" id="account-field-wrap">
+        <label>Username</label>
+        <input type="text" id="username-input" placeholder="e.g. alex, sportsreader99…" autocomplete="off" maxlength="32">
+      </div>
+      <div class="modal-actions" id="account-actions-signin">
+        <button class="btn-primary" id="signin-btn">Sign In / Create Account</button>
+        <button class="btn-secondary" id="cancel-account-btn">Cancel</button>
+      </div>
+      <div id="account-actions-signedout" style="display:none">
+        <button class="btn-secondary" style="width:100%; color:#ef4444; border-color:#fca5a5" id="signout-btn">Sign Out</button>
+      </div>
+
+      <!-- Reading history -->
+      <div id="history-section" style="display:none">
+        <div class="modal-section-title">Reading History</div>
+        <div id="history-list"></div>
+        <button class="clear-history-btn" id="clear-history-btn">Clear history</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ── State ──
-    let newsdataKey  = localStorage.getItem('newsdata_api_key')  || '';
-    let claudeKey    = localStorage.getItem('claude_api_key')    || '';
-    let activeCategory = '';   // current sport category keyword
-    let activeSearch   = '';   // current keyword search text
+    // ═══════════════════════════════════════════
+    //  STATE
+    // ═══════════════════════════════════════════
+    let newsdataKey    = localStorage.getItem('newsdata_api_key') || '';
+    let claudeKey      = localStorage.getItem('claude_api_key')   || '';
+    let currentUser    = localStorage.getItem('tiptoe_user')      || null;
+    let activeCategory = '';
+    let activeSearch   = '';
+    let allArticles    = [];   // cache for cover page
 
-    // ── DOM refs ──
-    const modalOverlay      = document.getElementById('modal-overlay');
-    const introOverlay      = document.getElementById('intro-overlay');
-    const newsdataKeyInput  = document.getElementById('newsdata-key-input');
-    const claudeKeyInput    = document.getElementById('claude-key-input');
-    const saveKeysBtn       = document.getElementById('save-keys-btn');
-    const cancelKeysBtn     = document.getElementById('cancel-keys-btn');
-    const settingsBtn       = document.getElementById('settings-btn');
-    const introBtn          = document.getElementById('intro-btn');
-    const introcloseBtn     = document.getElementById('intro-close-btn');
-    const articlesContainer = document.getElementById('articles-container');
-    const summaryContent    = document.getElementById('summary-content');
-    const filterInput       = document.getElementById('filter-input');
-    const filterBtn         = document.getElementById('filter-btn');
-    const clearFilterBtn    = document.getElementById('clear-filter-btn');
-    const filterTag         = document.getElementById('filter-tag');
-    const categoryBar       = document.getElementById('category-bar');
+    // ═══════════════════════════════════════════
+    //  DOM REFS
+    // ═══════════════════════════════════════════
+    const coverPage        = document.getElementById('cover-page');
+    const coverBgImage     = document.getElementById('cover-bg-image');
+    const coverSkeleton    = document.getElementById('cover-skeleton');
+    const coverArticleEl   = document.getElementById('cover-article');
+    const enterBtn         = document.getElementById('enter-btn');
 
-    // ── Intro Modal ──
-    introBtn.addEventListener('click', () => introOverlay.classList.remove('hidden'));
-    introcloseBtn.addEventListener('click', () => introOverlay.classList.add('hidden'));
+    const introOverlay     = document.getElementById('intro-overlay');
+    const settingsOverlay  = document.getElementById('settings-overlay');
+    const accountOverlay   = document.getElementById('account-overlay');
+
+    const newsdataKeyInput = document.getElementById('newsdata-key-input');
+    const claudeKeyInput   = document.getElementById('claude-key-input');
+    const saveKeysBtn      = document.getElementById('save-keys-btn');
+    const cancelKeysBtn    = document.getElementById('cancel-keys-btn');
+
+    const usernameInput    = document.getElementById('username-input');
+    const signinBtn        = document.getElementById('signin-btn');
+    const signoutBtn       = document.getElementById('signout-btn');
+    const cancelAccountBtn = document.getElementById('cancel-account-btn');
+    const accountTitle     = document.getElementById('account-modal-title');
+    const accountSub       = document.getElementById('account-modal-sub');
+    const accountFieldWrap = document.getElementById('account-field-wrap');
+    const accountActionsIn = document.getElementById('account-actions-signin');
+    const accountActionsOut= document.getElementById('account-actions-signedout');
+    const historySection   = document.getElementById('history-section');
+    const historyList      = document.getElementById('history-list');
+    const clearHistoryBtn  = document.getElementById('clear-history-btn');
+
+    const userBtn          = document.getElementById('user-btn');
+    const userAvatar       = document.getElementById('user-avatar');
+    const userLabel        = document.getElementById('user-label');
+    const readCountBadge   = document.getElementById('read-count-badge');
+
+    const articlesContainer= document.getElementById('articles-container');
+    const summaryContent   = document.getElementById('summary-content');
+    const filterInput      = document.getElementById('filter-input');
+    const filterBtn        = document.getElementById('filter-btn');
+    const clearFilterBtn   = document.getElementById('clear-filter-btn');
+    const filterTag        = document.getElementById('filter-tag');
+    const categoryBar      = document.getElementById('category-bar');
+
+    // ═══════════════════════════════════════════
+    //  COVER PAGE
+    // ═══════════════════════════════════════════
+    enterBtn.addEventListener('click', enterApp);
+
+    function enterApp() {
+      coverPage.classList.add('fade-out');
+      setTimeout(() => coverPage.classList.add('hidden'), 650);
+    }
+
+    function populateCover(article) {
+      if (!article) return;
+      coverSkeleton.style.display = 'none';
+      coverArticleEl.style.display = 'block';
+
+      coverArticleEl.innerHTML = `
+        <div class="cover-featured-label">⚡ Today's Top Story</div>
+        <div class="cover-featured-title">${escHtml(article.title)}</div>
+        ${article.description ? `<div class="cover-featured-desc">${escHtml(article.description)}</div>` : ''}
+        ${article.source_id   ? `<div class="cover-featured-source">— ${escHtml(article.source_id)}</div>` : ''}
+      `;
+
+      if (article.image_url) {
+        coverBgImage.style.backgroundImage = `url(${escHtml(article.image_url)})`;
+        coverBgImage.classList.add('loaded');
+      }
+    }
+
+    // ═══════════════════════════════════════════
+    //  ACCOUNT SYSTEM
+    // ═══════════════════════════════════════════
+    function getHistory() {
+      if (!currentUser) return [];
+      return JSON.parse(localStorage.getItem(`tiptoe_hist_${currentUser}`) || '[]');
+    }
+
+    function saveHistory(hist) {
+      if (!currentUser) return;
+      localStorage.setItem(`tiptoe_hist_${currentUser}`, JSON.stringify(hist.slice(0, 60)));
+    }
+
+    function markRead(article) {
+      if (!currentUser || !article) return;
+      const hist = getHistory();
+      if (!hist.find(h => h.link === article.link)) {
+        hist.unshift({ link: article.link, title: article.title, ts: Date.now() });
+        saveHistory(hist);
+        updateUserUI();
+        // Update card state if visible
+        document.querySelectorAll('.article-card').forEach(card => {
+          if (card.dataset.link === article.link) {
+            card.classList.add('is-read');
+            const pill = card.querySelector('.read-pill');
+            if (pill) pill.style.display = 'inline';
+          }
+        });
+      }
+    }
+
+    function isRead(link) {
+      return getHistory().some(h => h.link === link);
+    }
+
+    function updateUserUI() {
+      if (currentUser) {
+        userAvatar.textContent = currentUser[0].toUpperCase();
+        userLabel.textContent  = currentUser;
+        const count = getHistory().length;
+        if (count > 0) {
+          readCountBadge.textContent = count;
+          readCountBadge.classList.remove('hidden');
+        } else {
+          readCountBadge.classList.add('hidden');
+        }
+      } else {
+        userAvatar.textContent = '?';
+        userLabel.textContent  = 'Sign In';
+        readCountBadge.classList.add('hidden');
+      }
+    }
+
+    function openAccountModal() {
+      if (currentUser) {
+        // Show signed-in view with history
+        accountTitle.textContent = `@${currentUser}`;
+        accountSub.textContent   = 'Your reading history is tracked below.';
+        accountFieldWrap.style.display  = 'none';
+        accountActionsIn.style.display  = 'none';
+        accountActionsOut.style.display = 'block';
+        historySection.style.display    = 'block';
+        renderHistory();
+      } else {
+        accountTitle.textContent = 'Sign In';
+        accountSub.textContent   = 'Enter a username to track the articles you read. No password required — stored locally on your device.';
+        accountFieldWrap.style.display  = 'block';
+        accountActionsIn.style.display  = 'flex';
+        accountActionsOut.style.display = 'none';
+        historySection.style.display    = 'none';
+        usernameInput.value = '';
+      }
+      accountOverlay.classList.remove('hidden');
+    }
+
+    function renderHistory() {
+      const hist = getHistory();
+      if (hist.length === 0) {
+        historyList.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;padding:0.5rem 0">No articles read yet. Start exploring!</div>';
+        clearHistoryBtn.style.display = 'none';
+        return;
+      }
+      clearHistoryBtn.style.display = 'inline';
+      historyList.innerHTML = hist.map(h => `
+        <div class="history-item">
+          <div class="history-item-dot"></div>
+          <div>
+            <div class="history-item-title">${escHtml(h.title)}</div>
+            <div class="history-item-time">${timeAgo(h.ts)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function timeAgo(ts) {
+      const diff = Date.now() - ts;
+      const m = Math.floor(diff / 60000);
+      if (m < 1)  return 'Just now';
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      return `${Math.floor(h / 24)}d ago`;
+    }
+
+    userBtn.addEventListener('click', openAccountModal);
+
+    signinBtn.addEventListener('click', () => {
+      const name = usernameInput.value.trim();
+      if (!name) { usernameInput.focus(); return; }
+      currentUser = name;
+      localStorage.setItem('tiptoe_user', name);
+      accountOverlay.classList.add('hidden');
+      updateUserUI();
+      // Re-render cards to show read states
+      renderArticles(allArticles);
+    });
+
+    signoutBtn.addEventListener('click', () => {
+      currentUser = null;
+      localStorage.removeItem('tiptoe_user');
+      accountOverlay.classList.add('hidden');
+      updateUserUI();
+      renderArticles(allArticles);
+    });
+
+    cancelAccountBtn.addEventListener('click', () => accountOverlay.classList.add('hidden'));
+    accountOverlay.addEventListener('click', e => { if (e.target === accountOverlay) accountOverlay.classList.add('hidden'); });
+
+    clearHistoryBtn.addEventListener('click', () => {
+      if (!currentUser) return;
+      localStorage.removeItem(`tiptoe_hist_${currentUser}`);
+      updateUserUI();
+      renderHistory();
+      renderArticles(allArticles);
+    });
+
+    // ═══════════════════════════════════════════
+    //  INTRO MODAL
+    // ═══════════════════════════════════════════
+    document.getElementById('intro-btn').addEventListener('click', () => introOverlay.classList.remove('hidden'));
+    document.getElementById('intro-close-btn').addEventListener('click', () => introOverlay.classList.add('hidden'));
     introOverlay.addEventListener('click', e => { if (e.target === introOverlay) introOverlay.classList.add('hidden'); });
 
-    // ── Settings Modal ──
-    function openModal() {
+    // ═══════════════════════════════════════════
+    //  SETTINGS MODAL
+    // ═══════════════════════════════════════════
+    function openSettings() {
       newsdataKeyInput.value = newsdataKey;
       claudeKeyInput.value   = claudeKey;
-      modalOverlay.classList.remove('hidden');
+      settingsOverlay.classList.remove('hidden');
     }
 
-    function closeModal() {
-      modalOverlay.classList.add('hidden');
-    }
-
-    settingsBtn.addEventListener('click', openModal);
-    cancelKeysBtn.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+    document.getElementById('settings-btn').addEventListener('click', openSettings);
+    cancelKeysBtn.addEventListener('click', () => settingsOverlay.classList.add('hidden'));
+    settingsOverlay.addEventListener('click', e => { if (e.target === settingsOverlay) settingsOverlay.classList.add('hidden'); });
 
     saveKeysBtn.addEventListener('click', () => {
       const nd = newsdataKeyInput.value.trim();
       const cl = claudeKeyInput.value.trim();
       if (nd) { newsdataKey = nd; localStorage.setItem('newsdata_api_key', nd); }
       if (cl) { claudeKey   = cl; localStorage.setItem('claude_api_key', cl); }
-      closeModal();
+      settingsOverlay.classList.add('hidden');
       loadNews();
     });
 
-    // ── Category chips ──
+    // ═══════════════════════════════════════════
+    //  CATEGORY CHIPS
+    // ═══════════════════════════════════════════
     categoryBar.addEventListener('click', e => {
       const chip = e.target.closest('.cat-chip');
       if (!chip) return;
@@ -732,7 +1404,9 @@
       loadNews();
     });
 
-    // ── Keyword search ──
+    // ═══════════════════════════════════════════
+    //  SEARCH / FILTER
+    // ═══════════════════════════════════════════
     function applySearch() {
       const val = filterInput.value.trim();
       activeSearch = val;
@@ -753,94 +1427,118 @@
     clearFilterBtn.addEventListener('click', () => {
       filterInput.value = '';
       activeSearch = '';
-      filterTag.style.display = 'none';
+      filterTag.style.display  = 'none';
       clearFilterBtn.style.display = 'none';
       loadNews();
     });
 
-    // ── News loader ──
+    // ═══════════════════════════════════════════
+    //  NEWS LOADER
+    // ═══════════════════════════════════════════
     async function loadNews() {
       if (!newsdataKey) {
         articlesContainer.innerHTML = `
           <div class="state-msg">
-            <span>Enter your NewsData.io API key to get started.</span>
-            <button class="btn-secondary" onclick="openModal()" style="margin-top:0.5rem">⚙ Add API Key</button>
+            <span style="font-size:1.5rem">🔑</span>
+            <span>Add your NewsData.io API key to load sports headlines.</span>
+            <button class="btn-primary" onclick="openSettings()" style="margin-top:0.5rem;max-width:200px">⚙ Add API Key</button>
           </div>`;
         return;
       }
 
       articlesContainer.innerHTML = '';
-      const stateEl = document.createElement('div');
-      stateEl.className = 'state-msg';
-      stateEl.innerHTML = '<div class="spinner"></div><span>Loading sports news…</span>';
-      articlesContainer.appendChild(stateEl);
+      const loader = document.createElement('div');
+      loader.className = 'state-msg';
+      loader.innerHTML = '<div class="spinner"></div><span>Loading sports news…</span>';
+      articlesContainer.appendChild(loader);
 
       try {
-        let url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&category=sports&language=en`;
-        if (activeCategory) url += `&q=${encodeURIComponent(activeCategory)}`;
-        if (activeSearch)   url += `&q=${encodeURIComponent((activeCategory ? activeCategory + ' ' : '') + activeSearch)}`;
-        // Combine into one q param properly
         const qParts = [activeCategory, activeSearch].filter(Boolean);
-        url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&category=sports&language=en`;
+        let url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&category=sports&language=en`;
         if (qParts.length) url += `&q=${encodeURIComponent(qParts.join(' '))}`;
 
         const res = await fetch(url);
-        if (!res.ok) throw new Error(`NewsData.io API error: ${res.status}`);
+        if (!res.ok) throw new Error(`NewsData.io error ${res.status}`);
         const data = await res.json();
         if (data.status !== 'success') throw new Error(data.results?.message || 'NewsData.io request failed');
 
-        const articles = (data.results || []).slice(0, 15);
-        articlesContainer.innerHTML = '';
+        allArticles = (data.results || []).slice(0, 15);
 
-        if (articles.length === 0) {
-          articlesContainer.innerHTML = '<div class="state-msg">No articles found for this filter.</div>';
-          return;
+        // Populate cover with first article if it's still visible
+        if (!coverPage.classList.contains('hidden') && !coverPage.classList.contains('fade-out')) {
+          populateCover(allArticles[0]);
         }
 
-        articles.forEach(article => {
-          const card = document.createElement('div');
-          card.className = 'article-card';
-
-          const dateStr = article.pubDate
-            ? new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-            : '';
-
-          card.innerHTML = `
-            <div class="article-meta">
-              ${article.source_id ? `<span class="article-source">${escapeHtml(article.source_id)}</span>` : ''}
-              ${dateStr ? `<span class="article-date">${escapeHtml(dateStr)}</span>` : ''}
-            </div>
-            <div class="article-title">${escapeHtml(article.title)}</div>
-            ${article.description ? `<div class="article-description">${escapeHtml(article.description)}</div>` : ''}
-            <div class="article-actions">
-              <button class="summarize-btn">✨ Summarize</button>
-              <a class="article-link" href="${escapeHtml(article.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Read full article →</a>
-            </div>
-          `;
-
-          const btn = card.querySelector('.summarize-btn');
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            selectCard(card);
-            showSummary(article, btn);
-          });
-
-          card.addEventListener('click', () => {
-            selectCard(card);
-            showSummary(article, btn);
-          });
-
-          articlesContainer.appendChild(card);
-        });
+        renderArticles(allArticles);
 
       } catch (err) {
         articlesContainer.innerHTML = `
           <div class="state-msg">
             <span>⚠️ Could not load news.</span>
-            <span style="font-size:0.8rem">${escapeHtml(err.message)}</span>
-            <button class="btn-secondary" onclick="openModal()" style="margin-top:0.5rem">Check API Key</button>
+            <span style="font-size:0.8rem;color:var(--text-muted)">${escHtml(err.message)}</span>
+            <button class="btn-secondary" onclick="openSettings()" style="margin-top:0.5rem">Check API Key</button>
           </div>`;
       }
+    }
+
+    // ═══════════════════════════════════════════
+    //  RENDER ARTICLES
+    // ═══════════════════════════════════════════
+    function renderArticles(articles) {
+      articlesContainer.innerHTML = '';
+
+      if (!articles || articles.length === 0) {
+        articlesContainer.innerHTML = '<div class="state-msg">No articles found for this filter.</div>';
+        return;
+      }
+
+      articles.forEach(article => {
+        const read = isRead(article.link);
+
+        const card = document.createElement('div');
+        card.className = 'article-card' + (read ? ' is-read' : '');
+        card.dataset.link = article.link || '';
+
+        const dateStr = article.pubDate
+          ? new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+          : '';
+
+        const imgHtml = article.image_url
+          ? `<img class="card-image" src="${escHtml(article.image_url)}" alt="" loading="lazy" onerror="this.parentElement.querySelector('.card-image-placeholder').style.display='flex';this.remove()">`
+          : '';
+        const placeholderHtml = `<div class="card-image-placeholder" style="${article.image_url ? 'display:none' : ''}">🏆</div>`;
+
+        card.innerHTML = `
+          ${imgHtml}${placeholderHtml}
+          <div class="card-body">
+            <div class="card-meta">
+              ${article.source_id ? `<span class="card-source">${escHtml(article.source_id)}</span>` : ''}
+              ${dateStr ? `<span class="card-dot">·</span><span class="card-date">${escHtml(dateStr)}</span>` : ''}
+              <span class="read-pill" style="${read ? '' : 'display:none'}">✓ Read</span>
+            </div>
+            <div class="card-title">${escHtml(article.title)}</div>
+            ${article.description ? `<div class="card-desc">${escHtml(article.description)}</div>` : ''}
+            <div class="card-actions">
+              <button class="summarize-btn">✨ Summarize</button>
+              <a class="card-link" href="${escHtml(article.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Full article →</a>
+            </div>
+          </div>
+        `;
+
+        const btn = card.querySelector('.summarize-btn');
+
+        function handleSelect(e) {
+          e.stopPropagation();
+          selectCard(card);
+          markRead(article);
+          showSummary(article, btn);
+        }
+
+        btn.addEventListener('click', handleSelect);
+        card.addEventListener('click', handleSelect);
+
+        articlesContainer.appendChild(card);
+      });
     }
 
     function selectCard(card) {
@@ -848,45 +1546,52 @@
       card.classList.add('selected');
     }
 
-    // ── Summary ──
+    // ═══════════════════════════════════════════
+    //  SUMMARY PANEL
+    // ═══════════════════════════════════════════
     async function showSummary(article, btn) {
-      const title       = article.title       || 'Untitled';
-      const source      = article.source_id   || '';
-      const description = article.description || '';
-      const link        = article.link        || '#';
+      const title  = article.title       || 'Untitled';
+      const source = article.source_id   || '';
+      const desc   = article.description || '';
+      const link   = article.link        || '#';
+      const image  = article.image_url   || '';
+      const isAI   = !!(claudeKey && desc);
 
-      // Show loading state
       summaryContent.innerHTML = `
-        ${source ? `<div class="summary-source">${escapeHtml(source)}</div>` : ''}
-        <div class="summary-title">${escapeHtml(title)}</div>
+        ${image ? `<img class="summary-image" src="${escHtml(image)}" alt="" onerror="this.remove()">` : ''}
+        ${source ? `<div class="summary-source">${escHtml(source)}</div>` : ''}
+        <div class="summary-title">${escHtml(title)}</div>
         <hr class="summary-divider">
-        <div class="summary-label">Summary <span class="ai-badge">${claudeKey ? 'AI' : 'DESCRIPTION'}</span></div>
+        <div class="summary-label">
+          Summary
+          <span class="ai-badge">${isAI ? 'AI' : 'DESCRIPTION'}</span>
+        </div>
         <div class="summary-body" id="summary-body-text">
-          <div class="state-msg" style="padding:1rem 0;justify-content:flex-start;align-items:flex-start">
+          <div class="state-msg" style="padding:0.5rem 0;align-items:flex-start;min-height:60px">
             <div class="spinner" style="width:20px;height:20px;border-width:2px"></div>
           </div>
         </div>
         <div class="summary-footer">
-          <a class="article-link" href="${escapeHtml(link)}" target="_blank" rel="noopener">Read full article →</a>
+          <a class="card-link" href="${escHtml(link)}" target="_blank" rel="noopener">Read full article →</a>
         </div>
       `;
 
       if (btn) btn.disabled = true;
 
       try {
-        let summaryText = '';
-
-        if (claudeKey && description) {
-          summaryText = await fetchClaudeSummary(title, description);
-        } else if (description) {
-          summaryText = description;
+        let text = '';
+        if (claudeKey && desc) {
+          text = await fetchClaudeSummary(title, desc);
+        } else if (desc) {
+          text = desc;
         } else {
-          summaryText = 'No description available for this article. Click "Read full article" to view the full story.';
+          text = 'No description available. Click "Read full article" to view the full story.';
         }
-
-        document.getElementById('summary-body-text').innerHTML = formatSummary(summaryText);
-      } catch (err) {
-        document.getElementById('summary-body-text').textContent = description || 'Summary unavailable.';
+        document.getElementById('summary-body-text').innerHTML =
+          text.split('\n').filter(l => l.trim()).map(l => `<p>${escHtml(l)}</p>`).join('');
+      } catch {
+        const el = document.getElementById('summary-body-text');
+        if (el) el.innerHTML = desc ? `<p>${escHtml(desc)}</p>` : '<p>Summary unavailable.</p>';
       }
 
       if (btn) btn.disabled = false;
@@ -913,36 +1618,41 @@
 
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        throw new Error(err.error?.message || `Claude API error: ${response.status}`);
+        throw new Error(err.error?.message || `Claude error ${response.status}`);
       }
-
       const data = await response.json();
       return data.content?.[0]?.text || description;
     }
 
-    function formatSummary(text) {
-      // Wrap paragraphs
-      return text.split('\n').filter(l => l.trim()).map(l => `<p>${escapeHtml(l)}</p>`).join('');
-    }
-
-    // ── Utilities ──
-    function escapeHtml(str) {
+    // ═══════════════════════════════════════════
+    //  UTILS
+    // ═══════════════════════════════════════════
+    function escHtml(str) {
       if (!str) return '';
       return String(str)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;');
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
-    // ── Init ──
+    // ═══════════════════════════════════════════
+    //  INIT
+    // ═══════════════════════════════════════════
+    updateUserUI();
+
     if (!newsdataKey) {
-      // Show intro + prompt for API key
-      introOverlay.classList.remove('hidden');
+      // Show cover, then open settings after entering
+      enterBtn.addEventListener('click', openSettings, { once: true });
+      coverSkeleton.innerHTML = `
+        <div class="cover-featured-label" style="margin-bottom:0.75rem">👋 Welcome to TipToe</div>
+        <div style="color:rgba(255,255,255,0.85);font-size:1rem;font-weight:600;margin-bottom:0.375rem">Your sports news digest for busy students.</div>
+        <div style="color:rgba(255,255,255,0.55);font-size:0.85rem">Add your NewsData.io API key to get started.</div>
+      `;
       articlesContainer.innerHTML = `
         <div class="state-msg">
-          <span>Enter your NewsData.io API key to get started.</span>
-          <button class="btn-secondary" onclick="openModal()" style="margin-top:0.5rem">⚙ Add API Key</button>
+          <span style="font-size:1.5rem">🔑</span>
+          <span>Add your NewsData.io API key to load sports headlines.</span>
         </div>`;
     } else {
       loadNews();
