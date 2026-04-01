@@ -379,16 +379,16 @@
 
     .cat-chip.active { border-color: var(--brand); color: var(--brand); }
 
-    .chip-all        { background: #f3f4f6; color: #374151; }
-    .chip-football   { background: #f9fafb; color: #4b5563; }
-    .chip-basketball { background: #f3f4f6; color: #374151; }
-    .chip-soccer     { background: #e5e7eb; color: #374151; }
-    .chip-baseball   { background: #f9fafb; color: #4b5563; }
-    .chip-tennis     { background: #f3f4f6; color: #374151; }
-    .chip-golf       { background: #e5e7eb; color: #4b5563; }
-    .chip-cricket    { background: #f9fafb; color: #374151; }
-    .chip-hockey     { background: #f3f4f6; color: #4b5563; }
-    .chip-olympics   { background: #e5e7eb; color: #374151; }
+    .chip-all           { background: #f3f4f6; color: #374151; }
+    .chip-top           { background: #fef3c7; color: #92400e; }
+    .chip-politics      { background: #fee2e2; color: #991b1b; }
+    .chip-technology    { background: #dbeafe; color: #1e40af; }
+    .chip-business      { background: #d1fae5; color: #065f46; }
+    .chip-health        { background: #fce7f3; color: #9d174d; }
+    .chip-science       { background: #ede9fe; color: #5b21b6; }
+    .chip-entertainment { background: #ffedd5; color: #9a3412; }
+    .chip-sports        { background: #e0f2fe; color: #0c4a6e; }
+    .chip-world         { background: #f0fdf4; color: #166534; }
 
     /* ── Search ── */
     #filter-bar {
@@ -450,7 +450,7 @@
       padding: 1rem 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
     #articles-container::-webkit-scrollbar { width: 5px; }
@@ -484,15 +484,15 @@
     .card-image-placeholder { display: none; }
 
     /* Category-colored card backgrounds */
-    .article-card.cat-football   { background: #fef3c7; }
-    .article-card.cat-basketball { background: #ffedd5; }
-    .article-card.cat-soccer     { background: #dcfce7; }
-    .article-card.cat-baseball   { background: #dbeafe; }
-    .article-card.cat-tennis     { background: #fce7f3; }
-    .article-card.cat-golf       { background: #d1fae5; }
-    .article-card.cat-cricket    { background: #fef9c3; }
-    .article-card.cat-hockey     { background: #e0f2fe; }
-    .article-card.cat-olympics   { background: #faf5ff; }
+    .article-card.cat-top           { background: #fefce8; }
+    .article-card.cat-politics      { background: #fff1f2; }
+    .article-card.cat-technology    { background: #eff6ff; }
+    .article-card.cat-business      { background: #f0fdf4; }
+    .article-card.cat-health        { background: #fdf2f8; }
+    .article-card.cat-science       { background: #faf5ff; }
+    .article-card.cat-entertainment { background: #fff7ed; }
+    .article-card.cat-sports        { background: #f0f9ff; }
+    .article-card.cat-world         { background: #f0fdf4; }
 
     .card-cat-label {
       font-size: 0.65rem;
@@ -503,7 +503,7 @@
     }
 
     .card-body {
-      padding: 0.875rem 1rem;
+      padding: 1.25rem 1.25rem;
     }
 
     .card-meta {
@@ -541,20 +541,20 @@
     }
 
     .card-title {
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: 700;
-      line-height: 1.4;
+      line-height: 1.45;
       color: var(--text);
-      margin-bottom: 0.375rem;
+      margin-bottom: 0.5rem;
     }
 
     .card-desc {
-      font-size: 0.78rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 0.625rem;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -1123,7 +1123,6 @@
 
       <div class="header-right">
         <button class="hdr-btn" id="intro-btn">? About</button>
-        <button class="hdr-btn" id="settings-btn">⚙ Keys</button>
         <button class="user-btn" id="user-btn">
           <div class="user-avatar" id="user-avatar">?</div>
           <span id="user-label">Sign In</span>
@@ -1140,23 +1139,23 @@
           <span id="filter-tag" style="display:none; font-size:0.68rem; background:var(--brand); color:#fff; border-radius:4px; padding:0.12rem 0.4rem; font-weight:700; letter-spacing:0.03em;"></span>
         </div>
 
-        <div id="category-bar">
-          <button class="cat-chip chip-all active"        data-cat="">All Topics</button>
-          <button class="cat-chip chip-football"          data-cat="football">🏈 Football</button>
-          <button class="cat-chip chip-basketball"        data-cat="basketball">🏀 Basketball</button>
-          <button class="cat-chip chip-soccer"            data-cat="soccer">⚽ Soccer</button>
-          <button class="cat-chip chip-baseball"          data-cat="baseball">⚾ Baseball</button>
-          <button class="cat-chip chip-tennis"            data-cat="tennis">🎾 Tennis</button>
-          <button class="cat-chip chip-golf"              data-cat="golf">⛳ Golf</button>
-          <button class="cat-chip chip-cricket"           data-cat="cricket">🏏 Cricket</button>
-          <button class="cat-chip chip-hockey"            data-cat="hockey">🏒 Hockey</button>
-          <button class="cat-chip chip-olympics"          data-cat="olympics">🏅 Olympics</button>
-        </div>
-
         <div id="filter-bar">
-          <input type="text" id="filter-input" placeholder="Search topic, person, event…">
+          <input type="text" id="filter-input" placeholder="Search any topic, person, or event…">
           <button id="filter-btn">Search</button>
           <button id="clear-filter-btn" title="Clear search">✕</button>
+        </div>
+
+        <div id="category-bar">
+          <button class="cat-chip chip-all active"           data-cat="">⚡ All Topics</button>
+          <button class="cat-chip chip-top"                  data-cat="top">🔥 Top News</button>
+          <button class="cat-chip chip-politics"             data-cat="politics">🏛️ Politics</button>
+          <button class="cat-chip chip-technology"           data-cat="technology">💻 Technology</button>
+          <button class="cat-chip chip-business"             data-cat="business">📈 Business</button>
+          <button class="cat-chip chip-health"               data-cat="health">🏥 Health</button>
+          <button class="cat-chip chip-science"              data-cat="science">🔬 Science</button>
+          <button class="cat-chip chip-entertainment"        data-cat="entertainment">🎬 Entertainment</button>
+          <button class="cat-chip chip-sports"               data-cat="sports">🏆 Sports</button>
+          <button class="cat-chip chip-world"                data-cat="world">🌍 World</button>
         </div>
 
         <div id="articles-container">
@@ -1212,52 +1211,20 @@
       </div>
       <p class="modal-sub">Your news digest — built for busy students who want to stay informed on current events, fast.</p>
       <ul class="feature-list">
-        <li><span class="fi">📰</span><span><strong>Live headlines</strong> — fetches today's top news stories directly from NewsData.io.</span></li>
-        <li><span class="fi">🏷️</span><span><strong>Topic filters</strong> — narrow down by sports, politics, tech, and more using the category chips.</span></li>
-        <li><span class="fi">🎨</span><span><strong>Color-coded topics</strong> — each story card is color-coded by topic for quick visual scanning.</span></li>
-        <li><span class="fi">✨</span><span><strong>AI summaries</strong> — click any article for a concise breakdown. Powered by Claude via OpenRouter if you add a key; uses article descriptions otherwise.</span></li>
+        <li><span class="fi">📰</span><span><strong>Live headlines</strong> — fetches today's top stories across politics, tech, health, science, entertainment, sports, and more.</span></li>
+        <li><span class="fi">🔍</span><span><strong>Universal search</strong> — use the search bar at the top to find news on any topic, person, or event across all categories.</span></li>
+        <li><span class="fi">🎨</span><span><strong>Color-coded topics</strong> — each story card is color-coded by category for quick visual scanning.</span></li>
+        <li><span class="fi">⏱️</span><span><strong>Reading time estimates</strong> — every article shows how long it will take to read so you can plan your time.</span></li>
+        <li><span class="fi">✨</span><span><strong>AI summaries</strong> — click any article for a concise breakdown. Add an OpenRouter key in ⚙ Preferences to enable AI summaries.</span></li>
         <li><span class="fi">📖</span><span><strong>Reading tracker</strong> — sign in with a username to track which articles you've read and review your history.</span></li>
       </ul>
-      <p class="modal-sub" style="margin-bottom:0">Add your <strong>NewsData.io key</strong> via <strong>⚙ Keys</strong> in the top right to get started.</p>
+      <p class="modal-sub" style="margin-bottom:0">Start exploring — news loads automatically across all topics.</p>
       <div class="modal-actions">
         <button class="btn-primary" id="intro-close-btn">Let's go →</button>
       </div>
     </div>
   </div>
 
-  <!-- ═══ MODAL: Settings ═══ -->
-  <div class="modal-overlay hidden" id="settings-overlay">
-    <div class="modal">
-      <h2>API Keys</h2>
-      <p class="modal-sub">Keys are stored only in your browser's localStorage and sent only to the respective APIs.</p>
-
-      <div class="modal-section-title" style="margin-top:0; padding-top:0; border-top:none">NewsData.io (Required)</div>
-      <div class="field">
-        <label>API Key</label>
-        <input type="password" id="newsdata-key-input" placeholder="pub_xxxxxxxxxxxxxxxx" autocomplete="off">
-        <div class="field-hint">Fetches live sports headlines. Free tier at newsdata.io.</div>
-      </div>
-
-      <div class="modal-section-title">OpenRouter (Optional — AI Summaries)</div>
-      <div class="field">
-        <label>API Key</label>
-        <input type="password" id="claude-key-input" placeholder="sk-or-xxxxxxxxxxxxxxxx" autocomplete="off">
-        <div class="field-hint">Enables AI-generated article summaries via Claude on OpenRouter. Without this, article descriptions are used. Get a key at openrouter.ai.</div>
-      </div>
-
-      <div class="modal-section-title">News Preferences</div>
-      <div class="field">
-        <label>Your Interests &amp; Reading Style</label>
-        <textarea id="settings-pref-input" rows="3" placeholder="e.g. I follow NBA basketball and Premier League soccer. I like concise bullet-point summaries with key stats and context." maxlength="300"></textarea>
-        <div class="field-hint">Shapes what articles appear in your feed. Changes apply on next reload. Sign in to save preferences per account.</div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn-primary" id="save-keys-btn">Save & Reload News</button>
-        <button class="btn-secondary" id="cancel-keys-btn">Cancel</button>
-      </div>
-    </div>
-  </div>
 
   <!-- ═══ MODAL: Account ═══ -->
   <div class="modal-overlay hidden" id="account-overlay">
@@ -1294,8 +1261,8 @@
     // ═══════════════════════════════════════════
     //  STATE
     // ═══════════════════════════════════════════
-    let newsdataKey    = localStorage.getItem('newsdata_api_key') || '';
-    let claudeKey      = localStorage.getItem('claude_api_key')   || '';
+    const newsdataKey  = 'pub_91838acb8308423bafc2092a621d91b2';
+    const claudeKey    = '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';
     let currentUser    = localStorage.getItem('tiptoe_user')      || null;
     let userPref       = currentUser ? (localStorage.getItem(`tiptoe_pref_${currentUser}`) || '') : '';
     let activeCategory = '';
@@ -1312,13 +1279,7 @@
     const enterBtn         = document.getElementById('enter-btn');
 
     const introOverlay     = document.getElementById('intro-overlay');
-    const settingsOverlay  = document.getElementById('settings-overlay');
     const accountOverlay   = document.getElementById('account-overlay');
-
-    const newsdataKeyInput = document.getElementById('newsdata-key-input');
-    const claudeKeyInput   = document.getElementById('claude-key-input');
-    const saveKeysBtn      = document.getElementById('save-keys-btn');
-    const cancelKeysBtn    = document.getElementById('cancel-keys-btn');
 
     const usernameInput    = document.getElementById('username-input');
     const signinBtn        = document.getElementById('signin-btn');
@@ -1537,32 +1498,6 @@
     introOverlay.addEventListener('click', e => { if (e.target === introOverlay) introOverlay.classList.add('hidden'); });
 
     // ═══════════════════════════════════════════
-    //  SETTINGS MODAL
-    // ═══════════════════════════════════════════
-    function openSettings() {
-      newsdataKeyInput.value = newsdataKey;
-      claudeKeyInput.value   = claudeKey;
-      document.getElementById('settings-pref-input').value = userPref;
-      settingsOverlay.classList.remove('hidden');
-    }
-
-    document.getElementById('settings-btn').addEventListener('click', openSettings);
-    cancelKeysBtn.addEventListener('click', () => settingsOverlay.classList.add('hidden'));
-    settingsOverlay.addEventListener('click', e => { if (e.target === settingsOverlay) settingsOverlay.classList.add('hidden'); });
-
-    saveKeysBtn.addEventListener('click', () => {
-      const nd   = newsdataKeyInput.value.trim();
-      const cl   = claudeKeyInput.value.trim();
-      const pref = document.getElementById('settings-pref-input').value.trim();
-      if (nd) { newsdataKey = nd; localStorage.setItem('newsdata_api_key', nd); }
-      if (cl) { claudeKey   = cl; localStorage.setItem('claude_api_key', cl); }
-      userPref = pref;
-      if (currentUser) localStorage.setItem(`tiptoe_pref_${currentUser}`, pref);
-      settingsOverlay.classList.add('hidden');
-      loadNews();
-    });
-
-    // ═══════════════════════════════════════════
     //  CATEGORY CHIPS
     // ═══════════════════════════════════════════
     categoryBar.addEventListener('click', e => {
@@ -1606,16 +1541,6 @@
     //  NEWS LOADER
     // ═══════════════════════════════════════════
     async function loadNews() {
-      if (!newsdataKey) {
-        articlesContainer.innerHTML = `
-          <div class="state-msg">
-            <span style="font-size:1.5rem">🔑</span>
-            <span>Add your NewsData.io API key to load headlines.</span>
-            <button class="btn-primary" onclick="openSettings()" style="margin-top:0.5rem;max-width:200px">⚙ Add API Key</button>
-          </div>`;
-        return;
-      }
-
       articlesContainer.innerHTML = '';
       const loader = document.createElement('div');
       loader.className = 'state-msg';
@@ -1623,16 +1548,17 @@
       articlesContainer.appendChild(loader);
 
       try {
-        const qParts = [activeCategory, activeSearch, userPref].filter(Boolean);
-        let url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&category=sports&language=en`;
+        let url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsdataKey)}&language=en`;
+        if (activeCategory) url += `&category=${encodeURIComponent(activeCategory)}`;
+        const qParts = [activeSearch, userPref].filter(Boolean);
         if (qParts.length) url += `&q=${encodeURIComponent(qParts.join(' '))}`;
 
         const res = await fetch(url);
         if (!res.ok) throw new Error(`NewsData.io error ${res.status}`);
         const data = await res.json();
-        if (data.status !== 'success') throw new Error(data.results?.message || 'NewsData.io request failed');
+        if (data.status !== 'success') throw new Error(data.message || 'NewsData.io request failed');
 
-        allArticles = (data.results || []).slice(0, 3);
+        allArticles = (data.results || []).slice(0, 5);
 
         // Populate cover with first article if it's still visible
         if (!coverPage.classList.contains('hidden') && !coverPage.classList.contains('fade-out')) {
@@ -1647,7 +1573,6 @@
           <div class="state-msg">
             <span>⚠️ Could not load news.</span>
             <span style="font-size:0.8rem;color:var(--text-muted)">${escHtml(err.message)}</span>
-            <button class="btn-secondary" onclick="openSettings()" style="margin-top:0.5rem">Check API Key</button>
           </div>`;
       }
     }
@@ -1656,17 +1581,23 @@
     //  CATEGORY DETECTION
     // ═══════════════════════════════════════════
     function getArticleCategory(article) {
+      // Prefer API-provided category array
+      if (Array.isArray(article.category) && article.category.length > 0) {
+        const apiCat = article.category[0].toLowerCase();
+        const known = ['top','politics','technology','business','health','science','entertainment','sports','world'];
+        if (known.includes(apiCat)) return apiCat;
+      }
+      // Fallback: keyword detection
       const text = ((article.title || '') + ' ' + (article.description || '')).toLowerCase();
-      if (/\bfootball\b|nfl|quarterback|touchdown|super bowl/.test(text)) return 'football';
-      if (/\bbasketball\b|nba|lakers|celtics|knicks|cavaliers/.test(text)) return 'basketball';
-      if (/\bsoccer\b|fifa|premier league|mls|bundesliga|la liga|champions league/.test(text)) return 'soccer';
-      if (/\bbaseball\b|mlb|yankees|dodgers|pitcher|home run/.test(text)) return 'baseball';
-      if (/\btennis\b|wimbledon|us open|australian open|french open|atp|wta/.test(text)) return 'tennis';
-      if (/\bgolf\b|pga|masters|lpga|birdie|par/.test(text)) return 'golf';
-      if (/\bcricket\b|ipl|odi|t20|bcci/.test(text)) return 'cricket';
-      if (/\bhockey\b|nhl|puck|stanley cup/.test(text)) return 'hockey';
-      if (/\bolympics\b|olympic/.test(text)) return 'olympics';
-      return '';
+      if (/\bpolitics\b|president|congress|senate|election|democrat|republican|parliament|government/.test(text)) return 'politics';
+      if (/\btechnology\b|tech\b|ai\b|artificial intelligence|software|startup|silicon valley|apple|google|microsoft|openai/.test(text)) return 'technology';
+      if (/\bbusiness\b|economy|market|stock|gdp|trade|finance|revenue|earnings/.test(text)) return 'business';
+      if (/\bhealth\b|medical|vaccine|cancer|hospital|disease|fda|drug|mental health/.test(text)) return 'health';
+      if (/\bscience\b|research|study|nasa|climate|space|planet|species|discovery/.test(text)) return 'science';
+      if (/\bentertainment\b|movie|film|music|celebrity|oscars|grammy|streaming|netflix/.test(text)) return 'entertainment';
+      if (/\bsports\b|nfl|nba|mlb|nhl|fifa|premier league|olympics|tournament|championship/.test(text)) return 'sports';
+      if (/\bworld\b|international|global|united nations|war|conflict|treaty/.test(text)) return 'world';
+      return 'top';
     }
 
     // ═══════════════════════════════════════════
@@ -1693,20 +1624,24 @@
           : '';
 
         const catLabels = {
-          football:'🏈 Football', basketball:'🏀 Basketball', soccer:'⚽ Soccer',
-          baseball:'⚾ Baseball', tennis:'🎾 Tennis', golf:'⛳ Golf',
-          cricket:'🏏 Cricket', hockey:'🏒 Hockey', olympics:'🏅 Olympics'
+          top:'🔥 Top News', politics:'🏛️ Politics', technology:'💻 Technology',
+          business:'📈 Business', health:'🏥 Health', science:'🔬 Science',
+          entertainment:'🎬 Entertainment', sports:'🏆 Sports', world:'🌍 World'
         };
+
+        const readTime = estimateReadTime(article);
 
         card.innerHTML = `
           <div class="card-body">
             <div class="card-meta">
               ${article.source_id ? `<span class="card-source">${escHtml(article.source_id)}</span>` : ''}
               ${dateStr ? `<span class="card-dot">·</span><span class="card-date">${escHtml(dateStr)}</span>` : ''}
+              <span class="card-dot">·</span><span class="card-date">${escHtml(readTime)}</span>
               ${cat ? `<span class="card-cat-label">${catLabels[cat] || ''}</span>` : ''}
               <span class="read-pill" style="${read ? '' : 'display:none'}">✓ Read</span>
             </div>
             <div class="card-title">${escHtml(article.title)}</div>
+            ${article.description ? `<div class="card-desc">${escHtml(article.description)}</div>` : ''}
             <div class="card-actions">
               <button class="summarize-btn">✨ Summarize</button>
               <a class="card-link" href="${escHtml(article.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Full article →</a>
@@ -1853,7 +1788,7 @@
       if (!msg) return;
 
       if (!claudeKey) {
-        appendChatMsg('bot', 'Add your OpenRouter API key in ⚙ Keys to use the chat.');
+        appendChatMsg('bot', 'Add your OpenRouter API key in ⚙ Preferences to enable AI chat.');
         return;
       }
 
@@ -1912,6 +1847,13 @@
     // ═══════════════════════════════════════════
     //  UTILS
     // ═══════════════════════════════════════════
+    function estimateReadTime(article) {
+      const text = [article.title, article.description, article.content].filter(Boolean).join(' ');
+      const wordCount = text.trim().split(/\s+/).length;
+      const minutes = Math.max(1, Math.round(wordCount / 200));
+      return `${minutes} min read`;
+    }
+
     function escHtml(str) {
       if (!str) return '';
       return String(str)
@@ -1925,23 +1867,7 @@
     //  INIT
     // ═══════════════════════════════════════════
     updateUserUI();
-
-    if (!newsdataKey) {
-      // Show cover, then open settings after entering
-      enterBtn.addEventListener('click', openSettings, { once: true });
-      coverSkeleton.innerHTML = `
-        <div class="cover-featured-label" style="margin-bottom:0.75rem">👋 Welcome to News Flash</div>
-        <div style="color:rgba(255,255,255,0.85);font-size:1rem;font-weight:600;margin-bottom:0.375rem">Your current events digest for busy students.</div>
-        <div style="color:rgba(255,255,255,0.55);font-size:0.85rem">Add your NewsData.io API key to get started.</div>
-      `;
-      articlesContainer.innerHTML = `
-        <div class="state-msg">
-          <span style="font-size:1.5rem">🔑</span>
-          <span>Add your NewsData.io API key to load headlines.</span>
-        </div>`;
-    } else {
-      loadNews();
-    }
+    loadNews();
   </script>
 </body>
 </html>
