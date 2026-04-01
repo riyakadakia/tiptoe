@@ -712,6 +712,108 @@
 
     .summary-footer { margin-top: 1.25rem; }
 
+    /* ── Chatbot Panel ── */
+    #chatbot-panel {
+      height: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      border-top: 1.5px solid var(--border);
+      background: var(--surface);
+    }
+
+    .chatbot-header {
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.625rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    #chat-messages::-webkit-scrollbar { width: 4px; }
+    #chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .chat-msg {
+      max-width: 86%;
+      padding: 0.45rem 0.7rem;
+      border-radius: 12px;
+      font-size: 0.81rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .chat-msg-user {
+      background: var(--brand);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 3px;
+    }
+
+    .chat-msg-bot {
+      background: var(--surface2);
+      color: var(--text);
+      align-self: flex-start;
+      border-bottom-left-radius: 3px;
+      border: 1px solid var(--border);
+    }
+
+    .chat-msg-typing { opacity: 0.55; font-style: italic; }
+
+    #chat-input-area {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.5rem 0.75rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    #chat-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.38rem 0.7rem;
+      color: var(--text);
+      font-size: 0.8rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    #chat-input:focus { outline: none; border-color: var(--accent); }
+    #chat-input::placeholder { color: var(--text-muted); }
+    #chat-input:disabled { opacity: 0.6; }
+
+    #chat-send-btn {
+      background: var(--brand);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 0.38rem 0.875rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    #chat-send-btn:hover { background: var(--brand-dark); }
+    #chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
     /* ═══════════════════════════════
        MODALS
     ═══════════════════════════════ */
@@ -1065,7 +1167,7 @@
         </div>
       </section>
 
-      <!-- Right: Summary -->
+      <!-- Right: Summary + Chatbot -->
       <section id="summary-panel">
         <div class="panel-header">Article Summary</div>
         <div id="summary-content">
@@ -1073,6 +1175,19 @@
             <div class="icon">📰</div>
             <strong>Select an article to read its summary.</strong>
             <span>Click any story on the left to get a concise breakdown of the key points.</span>
+          </div>
+        </div>
+
+        <!-- Chatbot -->
+        <div id="chatbot-panel">
+          <div class="chatbot-header">
+            💬 Ask the News Bot
+            <span class="ai-badge">AI</span>
+          </div>
+          <div id="chat-messages"></div>
+          <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Ask about the loaded articles…" autocomplete="off">
+            <button id="chat-send-btn">Send</button>
           </div>
         </div>
       </section>
@@ -1525,6 +1640,7 @@
         }
 
         renderArticles(allArticles);
+        resetChat();
 
       } catch (err) {
         articlesContainer.innerHTML = `
@@ -1694,6 +1810,104 @@
       const data = await response.json();
       return data.choices?.[0]?.message?.content || description;
     }
+
+    // ═══════════════════════════════════════════
+    //  CHATBOT
+    // ═══════════════════════════════════════════
+    let chatHistory = [];
+
+    function buildArticleContext() {
+      if (!allArticles || allArticles.length === 0) return null;
+      return allArticles.map((a, i) => {
+        let text = `Article ${i + 1}: "${a.title}"\nSource: ${a.source_id || 'Unknown'}`;
+        if (a.description) text += `\nDescription: ${a.description}`;
+        if (a.content)     text += `\nContent: ${a.content}`;
+        return text;
+      }).join('\n\n');
+    }
+
+    function appendChatMsg(role, text, id) {
+      const box = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'chat-msg chat-msg-' + role + (role === 'typing' ? ' chat-msg-typing' : '');
+      if (id) div.id = id;
+      div.textContent = text;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      return div;
+    }
+
+    function resetChat() {
+      chatHistory = [];
+      const box = document.getElementById('chat-messages');
+      if (box) {
+        box.innerHTML = '';
+        appendChatMsg('bot', 'Articles loaded! Ask me anything about them — I\'ll answer only based on what\'s shown on the left.');
+      }
+    }
+
+    async function sendChatMessage() {
+      const input   = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send-btn');
+      const msg     = input.value.trim();
+      if (!msg) return;
+
+      if (!claudeKey) {
+        appendChatMsg('bot', 'Add your OpenRouter API key in ⚙ Keys to use the chat.');
+        return;
+      }
+
+      input.value = '';
+      input.disabled  = true;
+      sendBtn.disabled = true;
+
+      appendChatMsg('user', msg);
+      chatHistory.push({ role: 'user', content: msg });
+
+      const context = buildArticleContext();
+      const systemPrompt = context
+        ? `You are a news assistant helping students understand current events. Answer ONLY based on the articles provided below. If the answer is not found in these articles, respond with exactly: "That information isn't in the currently loaded articles. Try searching for that topic using the search bar on the left." Do not use your general training knowledge to fill in facts not present in the articles.\n\nLoaded articles:\n\n${context}`
+        : 'No articles are loaded yet. Tell the user to search for a topic using the search bar on the left to load articles first.';
+
+      const typingId = 'typing-' + Date.now();
+      appendChatMsg('bot', 'Thinking…', typingId);
+
+      try {
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${claudeKey}` },
+          body: JSON.stringify({
+            model: 'anthropic/claude-haiku-4-5',
+            max_tokens: 400,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              ...chatHistory.slice(-8)
+            ]
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error?.message || `OpenRouter error ${res.status}`);
+        const reply = data.choices?.[0]?.message?.content || 'Sorry, no response received.';
+        document.getElementById(typingId)?.remove();
+        chatHistory.push({ role: 'assistant', content: reply });
+        appendChatMsg('bot', reply);
+      } catch (err) {
+        document.getElementById(typingId)?.remove();
+        appendChatMsg('bot', '⚠️ ' + err.message);
+      } finally {
+        input.disabled   = false;
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    document.getElementById('chat-send-btn').addEventListener('click', sendChatMessage);
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendChatMessage();
+    });
+
+    // Initial placeholder message
+    appendChatMsg('bot', 'Load some articles on the left, then ask me anything about them!');
 
     // ═══════════════════════════════════════════
     //  UTILS
