@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id                   // Clerk user id
+  email      String   @unique
+  aboutMe    String?  @db.Text              // injected into chat system prompt
+  categories String[] @default(["general"]) // preferred category slugs
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  reads      ReadArticle[]
+  saves      SavedArticle[]
+}
+
+model ReadArticle {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url      String
+  headline String
+  source   String
+  category String
+  readAt   DateTime @default(now())
+
+  @@unique([userId, url])
+  @@index([userId, readAt])
+}
+
+model SavedArticle {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url      String
+  headline String
+  source   String
+  summary  String   @db.Text
+  category String
+  savedAt  DateTime @default(now())
+
+  @@unique([userId, url])
+  @@index([userId, savedAt])
+}
