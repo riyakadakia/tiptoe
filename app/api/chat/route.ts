@@ -4,8 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { type Article } from '@/lib/types';
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
 interface ChatRequest {
   messages: { role: 'user' | 'assistant'; content: string }[];
   articles: Article[];
@@ -64,7 +62,10 @@ Rules you must follow:
 }
 
 export async function POST(req: NextRequest) {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  const openrouterKey = process.env.OPENROUTER_API_KEY;
+
+  if (!anthropicKey && !openrouterKey) {
     return NextResponse.json({ error: 'Chat is not available.' }, { status: 503 });
   }
 
@@ -91,10 +92,19 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  const systemPrompt = buildSystemPrompt(articles, userContext);
+
+  // Use OpenRouter if no Anthropic key is set
+  if (!anthropicKey && openrouterKey) {
+    return streamViaOpenRouter(openrouterKey, systemPrompt, messages);
+  }
+
+  // Anthropic SDK path
+  const client = new Anthropic({ apiKey: anthropicKey });
   const stream = await client.messages.stream({
     model: 'claude-sonnet-4-5',
     max_tokens: 1024,
-    system: buildSystemPrompt(articles, userContext),
+    system: systemPrompt,
     messages,
   });
 
@@ -108,6 +118,75 @@ export async function POST(req: NextRequest) {
             event.delta.type === 'text_delta'
           ) {
             controller.enqueue(encoder.encode(event.delta.text));
+          }
+        }
+      } finally {
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(readable, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Transfer-Encoding': 'chunked',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  });
+}
+
+async function streamViaOpenRouter(
+  apiKey: string,
+  system: string,
+  messages: { role: 'user' | 'assistant'; content: string }[],
+): Promise<Response> {
+  const upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://newsflash.app',
+      'X-Title': 'NewsFlash',
+    },
+    body: JSON.stringify({
+      model: 'anthropic/claude-sonnet-4-5',
+      max_tokens: 1024,
+      stream: true,
+      messages: [{ role: 'system', content: system }, ...messages],
+    }),
+  });
+
+  if (!upstream.ok) {
+    return NextResponse.json({ error: 'Chat service error.' }, { status: 502 });
+  }
+
+  // Forward the SSE stream, extracting text deltas
+  const encoder = new TextEncoder();
+  const readable = new ReadableStream({
+    async start(controller) {
+      const reader = upstream.body!.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() ?? '';
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            const data = line.slice(6).trim();
+            if (data === '[DONE]') continue;
+            try {
+              const parsed = JSON.parse(data) as {
+                choices?: { delta?: { content?: string } }[];
+              };
+              const text = parsed.choices?.[0]?.delta?.content;
+              if (text) controller.enqueue(encoder.encode(text));
+            } catch {
+              // malformed chunk — skip
+            }
           }
         }
       } finally {

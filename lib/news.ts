@@ -22,11 +22,11 @@ function normalizeArticle(raw: any, category: Category, index: number): Article 
 
 export async function fetchNews(category: Category): Promise<Article[]> {
   const key = process.env.NEWS_API_KEY;
-  if (!key) return fallbackStories[category];
+  if (!key) return fallbackStories[category].slice(0, 4);
 
   try {
     const res = await fetch(
-      `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=12&apiKey=${key}`,
+      `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=10&apiKey=${key}`,
       { next: { revalidate: 900 } }, // cache for 15 minutes
     );
 
@@ -38,9 +38,15 @@ export async function fetchNews(category: Category): Promise<Article[]> {
       return fallbackStories[category];
     }
 
+    const seen = new Set<string>();
     return data.articles
       .filter((a: any) => a.title && a.title !== '[Removed]') // eslint-disable-line @typescript-eslint/no-explicit-any
-      .slice(0, 12)
+      .filter((a: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+        if (!a.url || seen.has(a.url)) return false;
+        seen.add(a.url);
+        return true;
+      })
+      .slice(0, 4)
       .map((a: any, i: number) => normalizeArticle(a, category, i)); // eslint-disable-line @typescript-eslint/no-explicit-any
   } catch {
     return fallbackStories[category];

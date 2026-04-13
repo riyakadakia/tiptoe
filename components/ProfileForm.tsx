@@ -55,7 +55,7 @@ export default function ProfileForm({ profile }: ProfileFormProps) {
         <Textarea
           value={aboutMe}
           onChange={(e) => setAboutMe(e.target.value)}
-          placeholder="CMU engineering student, interested in tech policy and climate. Skip sports and celebrity news."
+          placeholder="CMU engineering student, interested in tech policy and climate."
           className="min-h-28 resize-none"
           maxLength={2000}
         />

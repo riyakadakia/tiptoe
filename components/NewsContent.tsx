@@ -131,6 +131,7 @@ export default function NewsContent({ chatAvailable, clerkAvailable }: NewsConte
         articles={articles}
         loading={loading}
         error={error}
+        category={category}
         readIds={mergedReadIds}
         savedUrls={savedUrls}
         isSignedIn={!!isSignedIn}

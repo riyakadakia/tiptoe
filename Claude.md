@@ -131,7 +131,7 @@ App name "NewsFlash" in a serif display face. Today's date below it. On the righ
 Five categories: General, Technology, Business, Science, Health. Horizontal tab bar with an underline indicator for the active tab. For signed-in users, preferred categories (from their profile) are marked with a small filled dot next to the label. Clicking a tab swaps the grid. Default on load is the user's first preferred category if signed in, otherwise General.
 
 ### Story Grid
-Display 8 to 12 stories per category in a responsive grid (1 column mobile, 2 column tablet, 3 column desktop). Each StoryCard shows:
+Display exactly 4 stories per category in a responsive grid (1 column mobile, 2 column tablet and desktop, forming a 2x2 layout). The grid should feel finite and intentional, not like a feed. Each StoryCard shows:
 - Source name (small, uppercase, muted)
 - Headline (serif, prominent, 2 line clamp)
 - 2 to 3 sentence summary (sans-serif, comfortable line height)
@@ -141,9 +141,21 @@ Display 8 to 12 stories per category in a responsive grid (1 column mobile, 2 co
 
 Clicking a card's headline opens the original article in a new tab and fires a POST to `/api/reads` to record it. Stories the user has already read show a small muted "Read" badge. Saved stories show a filled bookmark.
 
+At the top of each category view, include a small header that makes the bounded set explicit:
+- "Today’s 4 stories in {Category}"
+
+Track read progress above the grid using a row of small pill segments (one per story), filled with the accent color as stories are read, followed by "{X} of {N} read" in muted text. No percentage, no animated bar — discrete pills only.
+
+When all stories have been read, replace the progress row with:
+- "You’re done for today" (in the accent color, top-right of the header)
+- Below the grid: "Discuss with the chatbot to go deeper on the stories you read today and 
+check back tomorrow for a fresh set of stories!"(in the accent color)
+
+The completion state is a core part of the product experience. It should feel calm and final — a gentle nudge toward the chatbot, not a prompt to consume more content. Do not add a "load more" or "refresh" affordance here.
+
 ### Profile Page (`/profile`)
 Two sections:
-1. **About me.** A textarea with placeholder text like "Tell NewsFlash who you are. Example: CMU engineering student, interested in tech policy and climate, skip sports." This text is injected into the chatbot's system prompt on every chat request.
+1. **About me.** A textarea with placeholder text like "Tell NewsFlash who you are. Example: CMU engineering student, interested in tech policy and health." This text is injected into the chatbot's system prompt on every chat request.
 2. **Preferred categories.** Checkbox list of the five categories. Saved changes update the `User.categories` array.
 
 Both sections save via PATCH to `/api/user`. Show a subtle "Saved" confirmation, no modal.
@@ -202,6 +214,7 @@ Stream responses back to the client using the Anthropic streaming API.
 - Do not make up information anywhere in the app.
 - Do not store chat history in the database for this version. It is out of scope.
 - Do not use Clerk webhooks. Lazy upsert on first authenticated request is simpler and sufficient.
+- Do not increase the number of stories beyond 4 per category or introduce layout patterns that suggest infinite or continuous content.
 
 ## Build Order
 
